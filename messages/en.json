@@ -1,0 +1,330 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "reset": "Reset",
+    "submit": "Submit",
+    "skip": "Skip",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "notFound": "Not found"
+  },
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "myBookings": "My bookings",
+    "myCars": "My cars",
+    "incoming": "Incoming",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "auth": {
+    "login": "Sign in",
+    "register": "Sign up",
+    "logout": "Sign out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "emailHint": "Example: user@example.com",
+    "passwordHint": "Example: MyP@ssw0rd!",
+    "rules": {
+      "length": "At least {min} characters",
+      "upper": "Uppercase letter (A-Z)",
+      "lower": "Lowercase letter (a-z)",
+      "number": "Digit (0-9)",
+      "special": "Special character (!@#…)",
+      "match": "Passwords match"
+    },
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "loginLoading": "Loading..."
+  },
+  "dashboard": {
+    "title": "My cars",
+    "subtitle": "Dashboard",
+    "addCar": "+ Add",
+    "addFirst": "Add first car",
+    "noCars": "You have no cars yet",
+    "pricePerDay": "${price}/day",
+    "status": {
+      "active": "Active",
+      "rented": "Rented",
+      "inactive": "Inactive"
+    },
+    "actions": {
+      "edit": "Edit",
+      "availability": "Availability"
+    }
+  },
+  "search": {
+    "filters": "Filters",
+    "rentalDates": "Rental dates",
+    "fuelType": "Fuel type",
+    "transmission": "Gearbox",
+    "maxPrice": "Max price/day",
+    "find": "Search",
+    "resetFilters": "Reset filters",
+    "found": "Found: {count} cars",
+    "nothingFound": "Nothing found",
+    "loadMore": "Load more",
+    "loadError": "Failed to load cars",
+    "noReviews": "no reviews",
+    "fuel": {
+      "petrol": "Petrol",
+      "diesel": "Diesel",
+      "electric": "Electric",
+      "hybrid": "Hybrid"
+    },
+    "gearbox": {
+      "automatic": "Auto",
+      "manual": "Manual"
+    }
+  },
+  "car": {
+    "new": {
+      "title": "New car",
+      "sectionPhoto": "Photo",
+      "sectionMain": "Main",
+      "sectionLocation": "Location",
+      "sectionPricing": "Pricing",
+      "sectionDescription": "Description",
+      "uploadPhoto": "Upload photo",
+      "cancel": "Cancel",
+      "brand": "Brand",
+      "model": "Model",
+      "year": "Year",
+      "fuelType": "Fuel type",
+      "transmission": "Transmission",
+      "seats": "Seats (1–9)",
+      "pricePerDay": "Price/day ($)",
+      "deposit": "Deposit ($)",
+      "address": "Address",
+      "lat": "Latitude",
+      "lng": "Longitude",
+      "description": "Description",
+      "descriptionPlaceholder": "Tell about the car...",
+      "submit": "Create car",
+      "submitting": "Saving...",
+      "gearbox": {
+        "automatic": "Automatic",
+        "manual": "Manual"
+      },
+      "fuel": {
+        "petrol": "Petrol",
+        "diesel": "Diesel",
+        "electric": "Electric",
+        "hybrid": "Hybrid"
+      }
+    },
+    "detail": {
+      "notFound": "Car not found",
+      "noReviews": "no reviews",
+      "description": "Description",
+      "owner": "Owner",
+      "features": "Features",
+      "booking": "Booking",
+      "showMore": "Show more",
+      "showLess": "Hide",
+      "writeMessage": "Message",
+      "bookNow": "Book now",
+      "booked": "✓ Booked",
+      "processing": "Processing...",
+      "pricePerDay": "${price} / day",
+      "deposit": "Deposit: ${amount}",
+      "seats": "{count} seats",
+      "fuel": {
+        "petrol": "Petrol",
+        "diesel": "Diesel",
+        "electric": "Electric",
+        "hybrid": "Hybrid"
+      },
+      "transmission": {
+        "automatic": "Automatic",
+        "manual": "Manual"
+      }
+    }
+  },
+  "profile": {
+    "setup": {
+      "title": "Step 1 of 1 — Fill in your profile",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone (optional)",
+      "photo": "Photo",
+      "continue": "Continue",
+      "skip": "Skip"
+    }
+  },
+  "calendar": {
+    "selectDates": "Select dates",
+    "resetDates": "Reset dates"
+  },
+  "bookings": {
+    "title": "Booking",
+    "rentalDates": "Rental dates",
+    "selectPeriod": "Rental period",
+    "daysSelected": "{count} days",
+    "perDay": "day",
+    "legendConfirmed": "Booked",
+    "legendPending": "Pending approval",
+    "priceTitle": "Price breakdown",
+    "deposit": "Deposit",
+    "total": "Total",
+    "payment": "Payment method",
+    "cashPayment": "Cash on delivery",
+    "cashDescription": "Pay directly to the owner",
+    "confirm": "Confirm booking",
+    "confirmed": "✓ Booking confirmed",
+    "processing": "Processing...",
+    "backToSearch": "Back to search"
+  },
+  "myBookings": {
+    "title": "My bookings",
+    "empty": "You have no bookings yet",
+    "browseCars": "Find a car",
+    "cancel": "Cancel",
+    "total": "${total}",
+    "tabs": {
+      "all": "All",
+      "active": "Active",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "status": {
+      "PENDING": "Pending",
+      "CONFIRMED": "Confirmed",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    }
+  },
+  "incomingBookings": {
+    "title": "Incoming bookings",
+    "empty": "No bookings in this category",
+    "total": "${total}",
+    "confirm": "Confirm",
+    "decline": "Decline",
+    "complete": "Complete",
+    "tabs": {
+      "all": "All",
+      "pending": "Pending",
+      "confirmed": "Confirmed"
+    },
+    "status": {
+      "PENDING": "Pending",
+      "CONFIRMED": "Confirmed",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Declined"
+    }
+  },
+  "slots": {
+    "alwaysAvailable": "Always available",
+    "alwaysAvailableNote": "The car is available for booking on any dates except blocked and already booked ones.",
+    "loadError": "Failed to load availability",
+    "hint": "Click a day to select a period. Click an existing period to delete it.",
+    "selectedPeriod": "Selected period: {range}",
+    "markAvailable": "Available",
+    "markBlocked": "Blocked",
+    "save": "Save",
+    "cancel": "Cancel",
+    "deletePeriod": "Delete period",
+    "legend": {
+      "available": "Available",
+      "blocked": "Blocked",
+      "booked": "Booked"
+    }
+  },
+  "landing": {
+    "nav": {
+      "how": "How it works",
+      "cars": "Cars",
+      "owners": "For owners",
+      "login": "Sign in",
+      "start": "Get started"
+    },
+    "hero": {
+      "badge": "Available in 12 cities across Germany",
+      "titleStart": "Rent a car",
+      "titleAccent": "directly",
+      "titleEnd": "from the owner",
+      "subtitle": "No middlemen. No hidden fees. Thousands of cars from verified owners all over Germany.",
+      "findCar": "Find a car",
+      "rentOut": "Rent out your car",
+      "happyRenters": "happy renters",
+      "cardLocation": "Berlin · Petrol · Automatic",
+      "perDay": "/ day",
+      "reviews": "{rating} ({count} reviews)",
+      "book": "Book now",
+      "verified": "Owner verified",
+      "responseTime": "Owner response",
+      "responseValue": "~45 minutes"
+    },
+    "stats": {
+      "cars": "Cars",
+      "trips": "Trips",
+      "rating": "Average rating",
+      "cities": "German cities"
+    },
+    "how": {
+      "label": "How it works",
+      "title": "Three simple steps",
+      "subtitle": "Find a car, book it and drive. It's that simple.",
+      "step1Title": "Find a car",
+      "step1Desc": "Enter your city, dates and filters. We'll show available cars near you.",
+      "step2Title": "Book it",
+      "step2Desc": "Send a request to the owner. Pay cash on pickup — no hidden fees.",
+      "step3Title": "Drive",
+      "step3Desc": "Meet the owner, get the keys and hit the road."
+    },
+    "popular": {
+      "label": "Popular",
+      "title": "Cars near you",
+      "viewAll": "View all",
+      "viewAllMobile": "View all cars"
+    },
+    "features": {
+      "label": "Why us",
+      "title": "Reliable and convenient",
+      "f1Title": "Verified owners",
+      "f1Desc": "Every owner is verified. Reviews from real renters.",
+      "f2Title": "Fast booking",
+      "f2Desc": "Request in 2 minutes. Owners respond within an hour.",
+      "f3Title": "All over Germany",
+      "f3Desc": "Berlin, Munich, Hamburg, Frankfurt and 8 more cities.",
+      "f4Title": "Honest reviews",
+      "f4Desc": "Only real ratings from renters after the trip."
+    },
+    "owners": {
+      "label": "For owners",
+      "title": "Your car is idle — it could be earning",
+      "subtitle": "Rent out your car when you're not using it. You set the price and choose the renters. We take a minimal commission.",
+      "benefit1": "You choose who to rent to",
+      "benefit2": "Set your own prices",
+      "benefit3": "Get paid in cash",
+      "addCar": "Add a car",
+      "stat1Value": "€800",
+      "stat1Label": "Average monthly income",
+      "stat1Sub": "at 16 rental days",
+      "stat2Value": "< 1h",
+      "stat2Label": "Response time",
+      "stat2Sub": "platform average",
+      "stat3Value": "4.8★",
+      "stat3Label": "Platform rating",
+      "stat3Sub": "from owners",
+      "stat4Value": "0%",
+      "stat4Label": "Hidden fees",
+      "stat4Sub": "only fair terms"
+    },
+    "cta": {
+      "title": "Ready to ride?",
+      "subtitle": "Thousands of cars are waiting. Find yours in 2 minutes.",
+      "findCar": "Find a car",
+      "register": "Sign up"
+    }
+  }
+}
