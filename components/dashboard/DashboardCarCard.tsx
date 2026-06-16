@@ -1,6 +1,11 @@
-import { Car as CarIcon, Pencil, Calendar } from 'lucide-react';
+'use client';
+
+import { useState } from 'react';
+import { Car as CarIcon, Pencil, Calendar, Trash2 } from 'lucide-react';
 import Button from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
+import Toggle from '@/components/atoms/Toggle';
+import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 import type { Car } from '@/types/car';
 
 interface DashboardCarCardProps {
@@ -8,8 +13,18 @@ interface DashboardCarCardProps {
   statusLabel: string;
   editLabel: string;
   availabilityLabel: string;
+  publishedLabel: string;
+  deleteLabel: string;
+  deleteConfirmTitle: string;
+  deleteConfirmBody: string;
+  deleteConfirmYes: string;
+  deleteConfirmNo: string;
   onEdit: (id: string) => void;
   onSlots: (id: string) => void;
+  onToggleStatus: (id: string, status: Car['status']) => void;
+  onRemove: (id: string) => void;
+  toggling: boolean;
+  removing: boolean;
 }
 
 export function DashboardCarCard({
@@ -17,23 +32,49 @@ export function DashboardCarCard({
   statusLabel,
   editLabel,
   availabilityLabel,
+  publishedLabel,
+  deleteLabel,
+  deleteConfirmTitle,
+  deleteConfirmBody,
+  deleteConfirmYes,
+  deleteConfirmNo,
   onEdit,
   onSlots,
+  onToggleStatus,
+  onRemove,
+  toggling,
+  removing,
 }: DashboardCarCardProps) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
   return (
-    <div className="border border-[#e4eaf0] hover:border-[#d4f5dc] hover:shadow-[0_4px_24px_rgba(72,201,100,0.1)] rounded-xl p-4 flex flex-col gap-4 transition-all">
+    <div className="border border-border-default hover:border-brand-subtle hover:shadow-[0_4px_24px_rgba(72,201,100,0.1)] rounded-xl p-4 flex flex-col gap-4 transition-all">
       <div className="flex items-center gap-3">
-        <div className="w-14 h-14 bg-[#f0fdf3] rounded-xl flex items-center justify-center text-[#48C964] shrink-0">
-          <CarIcon size={24} />
+        <div className="w-14 h-14 bg-brand-subtle rounded-xl flex items-center justify-center text-brand shrink-0 overflow-hidden">
+          {car.mainPhoto ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={car.mainPhoto} alt={`${car.brand} ${car.model}`} className="w-full h-full object-cover" />
+          ) : (
+            <CarIcon size={24} />
+          )}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[#1a2030]">{car.brand} {car.model} · {car.year}</p>
-          <p className="text-xs text-gray-400 truncate mt-0.5">{car.address}</p>
+          <p className="text-sm font-semibold text-text-base">{car.brand} {car.model} · {car.year}</p>
+          <p className="text-xs text-text-muted truncate mt-0.5">{car.address}</p>
           <div className="flex items-center gap-2 mt-1.5">
             <Badge variant={car.status} size="sm" label={statusLabel} className="min-w-0" />
-            <span className="text-xs text-[#1a2030] font-semibold">${car.pricePerDay}/день</span>
+            <span className="text-xs text-text-base font-semibold">${car.pricePerDay}/день</span>
           </div>
         </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-border-default pt-3">
+        <span className="text-sm text-text-secondary">{publishedLabel}</span>
+        <Toggle
+          checked={car.status === 'active'}
+          onChange={() => onToggleStatus(car.id, car.status)}
+          disabled={toggling || car.status === 'rented'}
+        />
       </div>
 
       <div className="flex gap-2">
@@ -43,7 +84,30 @@ export function DashboardCarCard({
         <Button variant="secondary" size="sm" className="flex-1" leftIcon={<Calendar size={13} />} onClick={() => onSlots(car.id)}>
           {availabilityLabel}
         </Button>
+        <Button
+          variant="danger-outline"
+          size="sm"
+          leftIcon={<Trash2 size={13} />}
+          onClick={() => setConfirmOpen(true)}
+          disabled={removing}
+        >
+          {deleteLabel}
+        </Button>
       </div>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title={deleteConfirmTitle}
+        description={deleteConfirmBody}
+        confirmLabel={deleteConfirmYes}
+        cancelLabel={deleteConfirmNo}
+        variant="danger"
+        onConfirm={() => {
+          setConfirmOpen(false);
+          onRemove(car.id);
+        }}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </div>
   );
 }

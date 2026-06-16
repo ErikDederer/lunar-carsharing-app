@@ -8,6 +8,17 @@ export interface BookedDate {
   bookingStatus: 'PENDING' | 'CONFIRMED';
 }
 
+export interface AvailabilitySlot {
+  dateFrom: string;
+  dateTo: string;
+  periodType: 'available' | 'blocked';
+}
+
+export interface BookedDatesResponse {
+  bookings: BookedDate[];
+  slots: AvailabilitySlot[];
+}
+
 export interface CreateBookingDto {
   carId: string;
   startAt: string;
@@ -17,7 +28,18 @@ export interface CreateBookingDto {
 
 export interface BookingRenter {
   id: string;
+  firstName?: string | null;
+  lastName?: string | null;
   email: string;
+  phone?: string | null;
+}
+
+export interface BookingOwner {
+  id: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  email: string;
+  phone?: string | null;
 }
 
 export interface BookingRawCar {
@@ -28,6 +50,8 @@ export interface BookingRawCar {
   pricePerDay: number | string;
   deposit: number | string;
   address: string;
+  photos?: { id: string; carPhotoUrl: string }[];
+  owner?: BookingOwner | null;
 }
 
 export interface BookingRaw {
@@ -57,4 +81,15 @@ export interface Booking {
   createdAt: string;
   car?: BookingRawCar | Car;
   renter?: BookingRenter;
+}
+
+export interface BookingStatsCounts {
+  pending: number;
+  confirmed: number;
+  cancelled: number;
+}
+
+export interface BookingStats {
+  myBookings: BookingStatsCounts;
+  incoming: BookingStatsCounts;
 }

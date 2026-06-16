@@ -1,5 +1,5 @@
-import type { Car, CarSearchItem, CarDetail, CreateCarDto } from '@/types/car';
-import type { BookedDate } from '@/types/booking';
+import type { Car, CarSearchItem, CarDetail, CreateCarDto, UpdateCarDto } from '@/types/car';
+import type { BookedDatesResponse } from '@/types/booking';
 import { apiFetch } from '@/lib/apiFetch';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -8,7 +8,8 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     const data = await res.json().catch(() => ({}));
     throw new Error(data?.message ?? `Request failed: ${res.status}`);
   }
-  return res.json() as Promise<T>;
+  const text = await res.text();
+  return (text ? JSON.parse(text) : null) as T;
 }
 
 function normalizeSearchItem(item: CarSearchItem): Car {
@@ -19,6 +20,7 @@ function normalizeSearchItem(item: CarSearchItem): Car {
 }
 
 function normalizeDetail(item: CarDetail): Car {
+  const photos = (item.photos ?? []).map((p) => ({ id: p.id, url: p.carPhotoUrl }));
   return {
     id: item.id,
     ownerId: item.ownerId,
@@ -35,6 +37,8 @@ function normalizeDetail(item: CarDetail): Car {
     lat: Number(item.lat),
     lng: Number(item.lng),
     address: item.address,
+    photos,
+    mainPhoto: photos[0]?.url ?? null,
     createdAt: item.createdAt,
   };
 }
@@ -78,12 +82,19 @@ export const carService = {
   getById: (id: string): Promise<Car> =>
     request<CarDetail>(`/cars/${id}`).then(normalizeDetail),
 
-  getBookedDates: (id: string): Promise<BookedDate[]> =>
-    request<BookedDate[]>(`/cars/${id}/booked-dates`),
+  getBookedDates: (id: string): Promise<BookedDatesResponse> =>
+    request<BookedDatesResponse>(`/cars/${id}/booked-dates`),
 
   create: (dto: CreateCarDto): Promise<Car> =>
     request<CarDetail>('/cars', {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dto),
+    }).then(normalizeDetail),
+
+  update: (id: string, dto: UpdateCarDto): Promise<Car> =>
+    request<CarDetail>(`/cars/${id}`, {
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     }).then(normalizeDetail),
@@ -96,4 +107,14 @@ export const carService = {
       body: formData,
     });
   },
+
+  deletePhoto: (carId: string, photoId: string): Promise<unknown> =>
+    request(`/cars/${carId}/photos/${photoId}`, {
+      method: 'DELETE',
+    }),
+
+  remove: (id: string): Promise<unknown> =>
+    request(`/cars/${id}`, {
+      method: 'DELETE',
+    }),
 };

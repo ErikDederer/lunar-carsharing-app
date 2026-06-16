@@ -52,6 +52,7 @@
     "addFirst": "Add first car",
     "noCars": "You have no cars yet",
     "pricePerDay": "${price}/day",
+    "published": "Published",
     "status": {
       "active": "Active",
       "rented": "Rented",
@@ -59,7 +60,14 @@
     },
     "actions": {
       "edit": "Edit",
-      "availability": "Availability"
+      "availability": "Availability",
+      "delete": "Delete"
+    },
+    "deleteConfirm": {
+      "title": "Delete car?",
+      "body": "The car will be removed from your listings. This action cannot be undone.",
+      "yes": "Yes, delete",
+      "no": "Cancel"
     }
   },
   "search": {
@@ -68,11 +76,15 @@
     "fuelType": "Fuel type",
     "transmission": "Gearbox",
     "maxPrice": "Max price/day",
+    "location": "Location",
+    "locationHint": "Click the map to search nearby",
+    "radius": "Radius: {km} km",
     "find": "Search",
     "resetFilters": "Reset filters",
     "found": "Found: {count} cars",
     "nothingFound": "Nothing found",
     "loadMore": "Load more",
+    "perDayShort": "/d",
     "loadError": "Failed to load cars",
     "noReviews": "no reviews",
     "fuel": {
@@ -84,7 +96,8 @@
     "gearbox": {
       "automatic": "Auto",
       "manual": "Manual"
-    }
+    },
+    "hideFilters": "Hide filters"
   },
   "car": {
     "new": {
@@ -122,10 +135,62 @@
         "hybrid": "Hybrid"
       }
     },
+    "form": {
+      "titleCreate": "New car",
+      "titleEdit": "Edit car",
+      "sectionPhoto": "Photos",
+      "sectionBasic": "Basic info",
+      "sectionTechnical": "Specifications",
+      "sectionPricing": "Pricing",
+      "sectionLocation": "Location",
+      "sectionDescription": "Description",
+      "brand": "Brand",
+      "model": "Model",
+      "year": "Year",
+      "seats": "Seats",
+      "fuelType": "Fuel type",
+      "transmission": "Transmission",
+      "pricePerDay": "Price per day",
+      "deposit": "Deposit",
+      "address": "Address",
+      "addressPlaceholder": "Alexanderplatz 1, Berlin",
+      "pickLocation": "Point on map",
+      "pickLocationHint": "Click the map to set the pickup location",
+      "descriptionPlaceholder": "Tell about the car...",
+      "photoDrop": "Drag photos here or click to select",
+      "photoFormats": "JPG, PNG up to 5 MB, max 10 photos",
+      "photoRemove": "Remove",
+      "create": "Create car",
+      "update": "Save changes",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "fuel": {
+        "petrol": "Petrol",
+        "diesel": "Diesel",
+        "electric": "Electric",
+        "hybrid": "Hybrid"
+      },
+      "gearbox": {
+        "automatic": "Automatic",
+        "manual": "Manual"
+      },
+      "errors": {
+        "required": "Required field",
+        "photoSize": "File larger than 5 MB",
+        "photoType": "Images only"
+      },
+      "toastSaved": "Car saved",
+      "toastError": "Failed to save",
+      "discardTitle": "Discard changes?",
+      "discardBody": "Unsaved changes will be lost.",
+      "discardConfirm": "Discard",
+      "discardCancel": "Keep editing"
+    },
     "detail": {
       "notFound": "Car not found",
       "noReviews": "no reviews",
       "description": "Description",
+      "location": "Location",
       "owner": "Owner",
       "features": "Features",
       "booking": "Booking",
@@ -136,6 +201,11 @@
       "booked": "✓ Booked",
       "processing": "Processing...",
       "pricePerDay": "${price} / day",
+      "perDay": "/ day",
+      "fuelLabel": "Fuel",
+      "gearboxLabel": "Gearbox",
+      "seatsLabel": "Seats",
+      "paymentProtected": "Your payment is protected. Funds are released to the owner only after the rental starts.",
       "deposit": "Deposit: ${amount}",
       "seats": "{count} seats",
       "fuel": {
@@ -159,6 +229,27 @@
       "photo": "Photo",
       "continue": "Continue",
       "skip": "Skip"
+    }
+  },
+  "userProfile": {
+    "title": "My profile",
+    "name": "Name",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "phone": "Phone",
+    "edit": "Edit profile",
+    "delete": "Delete profile",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving...",
+    "notFound": "Profile not found",
+    "deletePage": {
+      "title": "Delete profile?",
+      "description": "This action is irreversible. All your data, bookings and listings will be permanently deleted.",
+      "confirm": "Yes, delete account",
+      "deleting": "Deleting...",
+      "cancel": "Cancel, go back"
     }
   },
   "calendar": {
@@ -189,6 +280,7 @@
     "empty": "You have no bookings yet",
     "browseCars": "Find a car",
     "cancel": "Cancel",
+    "ownerContact": "Owner contacts",
     "total": "${total}",
     "tabs": {
       "all": "All",
@@ -326,5 +418,33 @@
       "findCar": "Find a car",
       "register": "Sign up"
     }
+  },
+  "footer": {
+    "tagline": "The fastest growing car rental platform in Europe. Find a car, book it and drive.",
+    "company": "Company",
+    "about": "About us",
+    "howItWorks": "How it works",
+    "resources": "Resources",
+    "insurance": "Insurance",
+    "mobileApps": "Mobile apps",
+    "helpCenter": "Help center",
+    "contacts": "Contacts",
+    "contactUs": "Contact us",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "impressum": "Impressum",
+    "copyright": "© Lunar Carsharing 2024–{year}. All rights reserved.",
+    "socialNetworks": "Social networks",
+    "siteFooter": "Site footer"
+  },
+  "settings": {
+    "title": "Settings",
+    "notifTitle": "Notifications",
+    "notifDesc": "Choose which booking counters to track. When at least one is on, the navbar shows live counts and polls every 10 seconds.",
+    "myBookings": "My bookings",
+    "incoming": "Incoming",
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "cancelled": "Cancelled"
   }
 }

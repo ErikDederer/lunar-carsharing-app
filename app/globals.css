@@ -102,6 +102,15 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.leaflet-container {
+  z-index: 0;
+}
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 1;
+}
+
 .rdp-busy-confirmed {
   opacity: 1 !important;
 }
@@ -118,6 +127,19 @@ body {
 .rdp-busy-pending .rdp-day_button {
   background-color: #fef3c7 !important;
   color: #92400e !important;
+  border-radius: 6px;
+}
+
+.rdp-busy-blocked {
+  opacity: 1 !important;
+}
+.rdp-busy-blocked .rdp-day_button {
+  background-color: #e5e7eb !important;
+  color: #6b7280 !important;
   text-decoration: line-through;
   border-radius: 6px;
+}
+
+.rdp-disabled:not(.rdp-selected) .rdp-day_button {
+  text-decoration: line-through;
 }

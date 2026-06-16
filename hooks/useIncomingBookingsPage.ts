@@ -10,13 +10,14 @@ export type IncomingFilterTab = 'all' | 'pending' | 'confirmed';
 export function useIncomingBookingsPage() {
   const hydrated = useAuthStore((s) => s._hydrated);
   const token = useAuthStore((s) => s.token);
+  const userId = useAuthStore((s) => s.user?.id);
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<IncomingFilterTab>('all');
 
   const { data: allBookings = [], isLoading, isError } = useQuery({
-    queryKey: ['bookings', 'incoming'],
+    queryKey: ['bookings', 'incoming', userId],
     queryFn: () => bookingService.getIncoming(),
-    enabled: hydrated && !!token,
+    enabled: hydrated && !!token && !!userId,
     refetchInterval: 5000,
     refetchOnMount: 'always',
   });
@@ -39,7 +40,7 @@ export function useIncomingBookingsPage() {
   });
 
   const bookings = allBookings.filter((b) => {
-    if (activeTab === 'all') return b.status !== 'CANCELLED';
+    if (activeTab === 'all') return true;
     if (activeTab === 'pending') return b.status === 'PENDING';
     return b.status === 'CONFIRMED';
   });

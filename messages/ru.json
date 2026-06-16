@@ -52,6 +52,7 @@
     "addFirst": "Добавить первую",
     "noCars": "У вас пока нет машин",
     "pricePerDay": "${price}/день",
+    "published": "Опубликована",
     "status": {
       "active": "Активна",
       "rented": "Арендована",
@@ -59,7 +60,14 @@
     },
     "actions": {
       "edit": "Редактировать",
-      "availability": "Доступность"
+      "availability": "Доступность",
+      "delete": "Удалить"
+    },
+    "deleteConfirm": {
+      "title": "Удалить машину?",
+      "body": "Машина будет удалена из вашего списка. Это действие необратимо.",
+      "yes": "Да, удалить",
+      "no": "Отмена"
     }
   },
   "search": {
@@ -68,12 +76,16 @@
     "fuelType": "Тип топлива",
     "transmission": "КПП",
     "maxPrice": "Макс. цена/день",
+    "location": "Геолокация",
+    "locationHint": "Нажмите на карту, чтобы искать рядом",
+    "radius": "Радиус: {km} км",
     "find": "Найти",
     "resetFilters": "Сбросить фильтры",
     "found": "Найдено: {count} машин",
     "nothingFound": "Ничего не найдено",
     "loadMore": "Показать ещё",
     "loadError": "Не удалось загрузить машины",
+    "perDayShort": "/д",
     "noReviews": "нет отзывов",
     "fuel": {
       "petrol": "Бензин",
@@ -84,7 +96,8 @@
     "gearbox": {
       "automatic": "Авто",
       "manual": "Механ."
-    }
+    },
+    "hideFilters": "Скрыть фильтры"
   },
   "car": {
     "new": {
@@ -122,10 +135,62 @@
         "hybrid": "Гибрид"
       }
     },
+    "form": {
+      "titleCreate": "Новая машина",
+      "titleEdit": "Редактирование машины",
+      "sectionPhoto": "Фотографии",
+      "sectionBasic": "Основное",
+      "sectionTechnical": "Характеристики",
+      "sectionPricing": "Цена",
+      "sectionLocation": "Локация",
+      "sectionDescription": "Описание",
+      "brand": "Марка",
+      "model": "Модель",
+      "year": "Год выпуска",
+      "seats": "Количество мест",
+      "fuelType": "Тип топлива",
+      "transmission": "Коробка передач",
+      "pricePerDay": "Цена за день",
+      "deposit": "Депозит",
+      "address": "Адрес",
+      "addressPlaceholder": "ул. Крещатик, 1, Киев",
+      "pickLocation": "Точка на карте",
+      "pickLocationHint": "Нажмите на карту, чтобы указать где забрать машину",
+      "descriptionPlaceholder": "Расскажите о машине...",
+      "photoDrop": "Перетащите фото сюда или нажмите для выбора",
+      "photoFormats": "JPG, PNG до 5 МБ, максимум 10 фото",
+      "photoRemove": "Удалить",
+      "create": "Создать машину",
+      "update": "Сохранить изменения",
+      "saving": "Сохранение...",
+      "cancel": "Отмена",
+      "fuel": {
+        "petrol": "Бензин",
+        "diesel": "Дизель",
+        "electric": "Электро",
+        "hybrid": "Гибрид"
+      },
+      "gearbox": {
+        "automatic": "Автомат",
+        "manual": "Механика"
+      },
+      "errors": {
+        "required": "Обязательное поле",
+        "photoSize": "Файл больше 5 МБ",
+        "photoType": "Только изображения"
+      },
+      "toastSaved": "Машина сохранена",
+      "toastError": "Не удалось сохранить",
+      "discardTitle": "Отменить изменения?",
+      "discardBody": "Несохранённые изменения будут потеряны.",
+      "discardConfirm": "Отменить",
+      "discardCancel": "Продолжить редактирование"
+    },
     "detail": {
       "notFound": "Машина не найдена",
       "noReviews": "нет отзывов",
       "description": "Описание",
+      "location": "Местоположение",
       "owner": "Владелец",
       "features": "Характеристики",
       "booking": "Бронирование",
@@ -136,6 +201,11 @@
       "booked": "✓ Забронировано",
       "processing": "Обработка...",
       "pricePerDay": "${price} / день",
+      "perDay": "/ день",
+      "fuelLabel": "Топливо",
+      "gearboxLabel": "КПП",
+      "seatsLabel": "Мест",
+      "paymentProtected": "Ваш платёж защищён. Средства поступают владельцу только после начала аренды.",
       "deposit": "Депозит: ${amount}",
       "seats": "{count} мест",
       "fuel": {
@@ -159,6 +229,27 @@
       "photo": "Фото",
       "continue": "Продолжить",
       "skip": "Пропустить"
+    }
+  },
+  "userProfile": {
+    "title": "Мой профиль",
+    "name": "Имя",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "email": "Email",
+    "phone": "Телефон",
+    "edit": "Редактировать профиль",
+    "delete": "Удалить профиль",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "saving": "Сохранение...",
+    "notFound": "Профиль не найден",
+    "deletePage": {
+      "title": "Удалить профиль?",
+      "description": "Это действие необратимо. Все ваши данные, бронирования и объявления будут удалены навсегда.",
+      "confirm": "Да, удалить аккаунт",
+      "deleting": "Удаление...",
+      "cancel": "Отмена, вернуться назад"
     }
   },
   "calendar": {
@@ -189,6 +280,7 @@
     "empty": "У вас пока нет броней",
     "browseCars": "Найти машину",
     "cancel": "Отменить",
+    "ownerContact": "Контакты владельца",
     "total": "${total}",
     "tabs": {
       "all": "Все",
@@ -326,5 +418,33 @@
       "findCar": "Найти машину",
       "register": "Зарегистрироваться"
     }
+  },
+  "footer": {
+    "tagline": "Самая быстрорастущая платформа аренды авто в Европе. Найди машину, забронируй и поезжай.",
+    "company": "Компания",
+    "about": "О нас",
+    "howItWorks": "Как это работает",
+    "resources": "Ресурсы",
+    "insurance": "Страхование",
+    "mobileApps": "Мобильные приложения",
+    "helpCenter": "Центр помощи",
+    "contacts": "Контакты",
+    "contactUs": "Связаться с нами",
+    "privacy": "Политика конфиденциальности",
+    "terms": "Условия использования",
+    "impressum": "Impressum",
+    "copyright": "© Lunar Carsharing 2024–{year}. Все права защищены.",
+    "socialNetworks": "Социальные сети",
+    "siteFooter": "Футер сайта"
+  },
+  "settings": {
+    "title": "Настройки",
+    "notifTitle": "Уведомления",
+    "notifDesc": "Выберите, какие счётчики броней отслеживать. Если включён хотя бы один — в навбаре показываются актуальные цифры и идёт опрос каждые 10 секунд.",
+    "myBookings": "Мои брони",
+    "incoming": "Входящие",
+    "pending": "В ожидании",
+    "confirmed": "Подтверждённые",
+    "cancelled": "Отменённые"
   }
 }
