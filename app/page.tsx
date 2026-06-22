@@ -4,8 +4,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Car, Shield, Star, Clock, MapPin, ChevronRight, CheckCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useQuery } from '@tanstack/react-query';
 import StarRating from '@/components/atoms/StarRating';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
+import { carService } from '@/services/car.service';
 
 export default function HomePage() {
   const t = useTranslations('landing');
@@ -30,38 +32,11 @@ export default function HomePage() {
     { icon: <Star size={20} />, title: t('features.f4Title'), desc: t('features.f4Desc') },
   ];
 
-  const cars = [
-    {
-      name: 'BMW 3 Series',
-      year: 2022,
-      price: 65,
-      rating: 4.9,
-      reviews: 34,
-      fuel: 'Benzin',
-      city: 'Berlin',
-      image: '/2025-bmw-3-series-102-66562dcd6a1c6.avif',
-    },
-    {
-      name: 'Volkswagen Golf',
-      year: 2023,
-      price: 45,
-      rating: 4.7,
-      reviews: 21,
-      fuel: 'Elektro',
-      city: 'München',
-      image: '/B2024CW00030_web_1600.jpg',
-    },
-    {
-      name: 'Mercedes C-Class',
-      year: 2021,
-      price: 80,
-      rating: 5.0,
-      reviews: 18,
-      fuel: 'Diesel',
-      city: 'Hamburg',
-      image: '/c-class-exterior-left-front-three-quarter-2.avif',
-    },
-  ];
+  const { data: carsData } = useQuery({
+    queryKey: ['popular-cars'],
+    queryFn: () => carService.getAll({ limit: 3 }),
+  });
+  const cars = carsData?.cars ?? [];
 
   const ownerStats = [
     { value: t('owners.stat1Value'), label: t('owners.stat1Label'), sub: t('owners.stat1Sub') },
@@ -79,7 +54,7 @@ export default function HomePage() {
               <Car size={16} className="text-text-inverse" />
             </div>
             <span className="text-lg font-bold text-text-base">
-              Lunar<span className="text-brand"> Carsharing</span>
+              P2P<span className="text-brand"> Carsharing</span>
             </span>
           </div>
 
@@ -209,39 +184,37 @@ export default function HomePage() {
             <div className="relative">
               <div className="absolute inset-0 bg-brand-subtle rounded-3xl" />
               <div className="relative p-8">
+                {cars[0] && (
                 <div className="bg-bg-card rounded-2xl shadow-xl border border-border-default p-5 mb-4">
-                  <div className="relative w-full h-40 rounded-xl overflow-hidden mb-4">
-                    <Image
-                      src="/2022-bmw-3-series-330e-xdrive-plug-in-hybrid-angular-front-exterior-view_100826982_l.jpg"
-                      alt="BMW 3 Series 2022"
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 33vw"
-                      className="object-cover"
-                    />
+                  <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-bg-page">
+                    {cars[0].mainPhoto && (
+                      <Image
+                        src={cars[0].mainPhoto}
+                        alt={`${cars[0].brand} ${cars[0].model}`}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 33vw"
+                        className="object-cover"
+                      />
+                    )}
                   </div>
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <p className="font-bold text-text-base">BMW 3 Series 2022</p>
-                      <p className="text-sm text-text-muted">{t('hero.cardLocation')}</p>
+                      <p className="font-bold text-text-base">{cars[0].brand} {cars[0].model} {cars[0].year}</p>
+                      <p className="text-sm text-text-muted">{cars[0].address}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-xl font-bold text-landing-cta-text">€65</p>
+                      <p className="text-xl font-bold text-landing-cta-text">€{cars[0].pricePerDay}</p>
                       <p className="text-xs text-text-muted">{t('hero.perDay')}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <StarRating value={4.9} size="sm" readonly />
-                    <span className="text-xs text-text-muted">
-                      {t('hero.reviews', { rating: '4.9', count: 34 })}
-                    </span>
-                  </div>
                   <Link
-                    href="/search"
+                    href={`/cars/${cars[0].id}`}
                     className="mt-4 w-full flex items-center justify-center bg-landing-cta-bg text-text-base font-semibold py-3 rounded-xl hover:bg-landing-cta-hover transition-colors"
                   >
                     {t('hero.book')}
                   </Link>
                 </div>
+                )}
 
                 <div className="absolute -top-4 -right-4 bg-bg-card rounded-xl shadow-lg border border-border-default px-4 py-3 flex items-center gap-2">
                   <CheckCircle size={16} className="text-landing-cta-bg" />
@@ -314,38 +287,35 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {cars.map((car) => (
-              <div
-                key={car.name}
+              <Link
+                key={car.id}
+                href={`/cars/${car.id}`}
                 className="bg-bg-card rounded-2xl border border-border-default overflow-hidden hover:shadow-lg hover:border-brand transition-all group"
               >
-                <div className="relative h-44 overflow-hidden">
-                  <Image
-                    src={car.image}
-                    alt={car.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover transition-transform group-hover:scale-105"
-                  />
+                <div className="relative aspect-video overflow-hidden bg-bg-page">
+                  {car.mainPhoto && (
+                    <Image
+                      src={car.mainPhoto}
+                      alt={`${car.brand} ${car.model}`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover transition-transform group-hover:scale-105"
+                    />
+                  )}
                 </div>
                 <div className="p-5">
                   <div className="flex items-start justify-between mb-1">
-                    <p className="font-bold text-text-base">{car.name}</p>
+                    <p className="font-bold text-text-base">{car.brand} {car.model}</p>
                     <p className="text-lg font-bold text-landing-cta-text">
-                      €{car.price}
+                      €{car.pricePerDay}
                       <span className="text-xs font-normal text-text-muted">/д</span>
                     </p>
                   </div>
                   <p className="text-sm text-text-muted mb-3">
-                    {car.city} · {car.year} · {car.fuel}
+                    {car.address} · {car.year} · {car.fuelType}
                   </p>
-                  <div className="flex items-center gap-2">
-                    <StarRating value={car.rating} size="sm" readonly />
-                    <span className="text-xs text-text-muted">
-                      {car.rating} ({car.reviews})
-                    </span>
-                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, MapPin } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Button from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
@@ -55,6 +55,8 @@ export function CarForm({ mode, carId }: CarFormProps) {
     confirmCancel,
     dismissCancel,
     car,
+    isLocating,
+    detectLocation,
   } = useCarForm(mode, carId);
 
   const err = (field: keyof typeof errors) =>
@@ -234,6 +236,15 @@ export function CarForm({ mode, carId }: CarFormProps) {
             disabled={isSubmitting}
             required
           />
+          <button
+            type="button"
+            onClick={detectLocation}
+            disabled={isLocating || isSubmitting}
+            className="flex items-center gap-1.5 text-xs text-brand hover:text-brand-hover disabled:opacity-50"
+          >
+            <MapPin size={14} />
+            {isLocating ? tCommon('loading') : t('useMyLocation')}
+          </button>
           <LocationPicker
             label={t('pickLocation')}
             hint={t('pickLocationHint')}

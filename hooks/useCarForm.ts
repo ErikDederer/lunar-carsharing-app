@@ -66,6 +66,20 @@ export function useCarForm(mode: CarFormMode, carId?: string) {
   const [feedback, setFeedback] = useState<FormFeedback>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
+
+  function detectLocation() {
+    if (!navigator.geolocation) return;
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setField('lat', pos.coords.latitude);
+        setField('lng', pos.coords.longitude);
+        setIsLocating(false);
+      },
+      () => setIsLocating(false)
+    );
+  }
 
   const uidRef = useRef(0);
   const [syncedId, setSyncedId] = useState<string | null>(null);
@@ -88,7 +102,7 @@ export function useCarForm(mode: CarFormMode, carId?: string) {
 
   const isDirty = useMemo(
     () => !sameValues(form, initialForm) || newPhotos.length > 0 || removedPhotoIds.length > 0,
-    [form, initialForm, newPhotos.length, removedPhotoIds.length],
+    [form, initialForm, newPhotos.length, removedPhotoIds.length]
   );
 
   const revalidate = useCallback(
@@ -101,7 +115,7 @@ export function useCarForm(mode: CarFormMode, carId?: string) {
         return next;
       });
     },
-    [],
+    []
   );
 
   const setField = useCallback(
@@ -112,7 +126,7 @@ export function useCarForm(mode: CarFormMode, carId?: string) {
         return next;
       });
     },
-    [touched, revalidate, photoCount],
+    [touched, revalidate, photoCount]
   );
 
   const blurField = useCallback(
@@ -120,7 +134,7 @@ export function useCarForm(mode: CarFormMode, carId?: string) {
       setTouched((prev) => new Set(prev).add(field));
       revalidate(field, form, photoCount);
     },
-    [form, photoCount, revalidate],
+    [form, photoCount, revalidate]
   );
 
   const addFiles = useCallback(async (files: FileList | File[]) => {
@@ -164,7 +178,7 @@ export function useCarForm(mode: CarFormMode, carId?: string) {
         if (newPhotos.length > 0) {
           await carService.uploadPhotos(
             created.id,
-            newPhotos.map((p) => p.file),
+            newPhotos.map((p) => p.file)
           );
         }
         return created;
@@ -178,7 +192,7 @@ export function useCarForm(mode: CarFormMode, carId?: string) {
       if (newPhotos.length > 0) {
         await carService.uploadPhotos(
           id,
-          newPhotos.map((p) => p.file),
+          newPhotos.map((p) => p.file)
         );
       }
       return updated;
@@ -210,7 +224,7 @@ export function useCarForm(mode: CarFormMode, carId?: string) {
       if (!validateAll()) return;
       mutation.mutate(form);
     },
-    [validateAll, mutation, form],
+    [validateAll, mutation, form]
   );
 
   const requestCancel = useCallback(() => {
@@ -250,5 +264,7 @@ export function useCarForm(mode: CarFormMode, carId?: string) {
     confirmCancel,
     dismissCancel,
     car,
+    isLocating,
+    detectLocation,
   };
 }

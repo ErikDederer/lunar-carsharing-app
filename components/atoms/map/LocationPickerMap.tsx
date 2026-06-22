@@ -1,6 +1,7 @@
 'use client';
 
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -27,6 +28,16 @@ function ClickHandler({ onChange }: { onChange: (lat: number, lng: number) => vo
   return null;
 }
 
+function FlyTo({ lat, lng }: { lat: number; lng: number }) {
+  const map = useMap();
+  useEffect(() => {
+    if (lat !== 0 || lng !== 0) {
+      map.flyTo([lat, lng], 14);
+    }
+  }, [lat, lng, map]);
+  return null;
+}
+
 export default function LocationPickerMap({ lat, lng, onChange }: LocationPickerMapProps) {
   const hasPoint = lat !== 0 || lng !== 0;
   const center: [number, number] = hasPoint ? [lat, lng] : [52.52, 13.405];
@@ -43,6 +54,7 @@ export default function LocationPickerMap({ lat, lng, onChange }: LocationPicker
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <ClickHandler onChange={onChange} />
+      <FlyTo lat={lat} lng={lng} />
       {hasPoint && <Marker position={[lat, lng]} icon={markerIcon} />}
     </MapContainer>
   );

@@ -14,33 +14,39 @@ export function useSearchPage() {
   const [maxPrice, setMaxPrice] = useState('');
   const [point, setPoint] = useState<{ lat: number; lng: number } | null>(null);
   const [radius, setRadius] = useState(50);
+  const [isLocating, setIsLocating] = useState(false);
+
+  function detectLocation() {
+    if (!navigator.geolocation) return;
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setPoint({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setIsLocating(false);
+      },
+      () => setIsLocating(false)
+    );
+  }
+
   const [appliedFilters, setAppliedFilters] = useState<CarFilters>({});
 
-  const {
-    data,
-    isLoading,
-    isError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['cars', appliedFilters],
-    queryFn: ({ pageParam }) =>
-      carService.getAll({ ...appliedFilters, limit: PAGE_SIZE, offset: pageParam }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
-      const loaded = allPages.reduce((sum, p) => sum + p.cars.length, 0);
-      return loaded < lastPage.total ? loaded : undefined;
-    },
-  });
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['cars', appliedFilters],
+      queryFn: ({ pageParam }) =>
+        carService.getAll({ ...appliedFilters, limit: PAGE_SIZE, offset: pageParam }),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages) => {
+        const loaded = allPages.reduce((sum, p) => sum + p.cars.length, 0);
+        return loaded < lastPage.total ? loaded : undefined;
+      },
+    });
 
   const cars = data?.pages.flatMap((p) => p.cars) ?? [];
   const total = data?.pages[0]?.total ?? 0;
 
   function toggleFuel(type: string) {
-    setFuel((prev) =>
-      prev.includes(type) ? prev.filter((f) => f !== type) : [...prev, type]
-    );
+    setFuel((prev) => (prev.includes(type) ? prev.filter((f) => f !== type) : [...prev, type]));
   }
 
   function applyFilters() {
@@ -69,12 +75,18 @@ export function useSearchPage() {
   }
 
   return {
-    dateRange, setDateRange,
-    fuel, toggleFuel,
-    transmission, setTransmission,
-    maxPrice, setMaxPrice,
-    point, setPoint,
-    radius, setRadius,
+    dateRange,
+    setDateRange,
+    fuel,
+    toggleFuel,
+    transmission,
+    setTransmission,
+    maxPrice,
+    setMaxPrice,
+    point,
+    setPoint,
+    radius,
+    setRadius,
     applyFilters,
     resetFilters,
     cars,
@@ -84,5 +96,7 @@ export function useSearchPage() {
     hasNextPage,
     isFetchingNextPage,
     loadMore: fetchNextPage,
+    isLocating,
+    detectLocation,
   };
 }

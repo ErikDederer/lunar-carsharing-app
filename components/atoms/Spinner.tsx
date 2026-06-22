@@ -1,64 +1,33 @@
-import React from 'react';
-
-type SpinnerSize = 'sm' | 'md' | 'lg';
-type SpinnerColor = 'inherit' | 'primary' | 'white';
-
 interface SpinnerProps {
-  size?: SpinnerSize;
-  color?: SpinnerColor;
+  size?: 'sm' | 'md' | 'lg';
 }
 
-const sizeMap: Record<SpinnerSize, number> = {
-  sm: 16,
-  md: 24,
-  lg: 40,
+const sizes = {
+  sm: 'w-4 h-4',
+  md: 'w-6 h-6',
+  lg: 'w-8 h-8',
 };
 
-const colorMap: Record<SpinnerColor, string> = {
-  inherit: 'currentColor',
-  primary: 'var(--brand)',
-  white: 'var(--text-inverse)',
-};
-
-export default function Spinner({ size = 'md', color = 'inherit' }: SpinnerProps) {
-  const px = sizeMap[size];
-  const stroke = colorMap[color];
-  const thickness = size === 'sm' ? 2 : size === 'md' ? 2.5 : 3.5;
-
+export default function Spinner({ size = 'md' }: SpinnerProps) {
   return (
     <svg
-      width={px}
-      height={px}
-      viewBox="0 0 24 24"
+      className={`${sizes[size]} animate-spin text-current`}
+      xmlns="http://www.w3.org/2000/svg"
       fill="none"
-      aria-label="Loading"
-      role="status"
-      style={{ display: 'inline-block', flexShrink: 0 }}
+      viewBox="0 0 24 24"
     >
-      <style>{`
-        @keyframes spinner-rotate {
-          100% { transform: rotate(360deg); }
-        }
-        @keyframes spinner-dash {
-          0%   { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
-          50%  { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
-          100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
-        }
-        .spinner-circle {
-          animation:
-            spinner-rotate 1.4s linear infinite,
-            spinner-dash   1.4s ease-in-out infinite;
-          transform-origin: center;
-        }
-      `}</style>
       <circle
-        className="spinner-circle"
+        className="opacity-25"
         cx="12"
         cy="12"
         r="10"
-        stroke={stroke}
-        strokeWidth={thickness}
-        strokeLinecap="round"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
       />
     </svg>
   );

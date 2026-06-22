@@ -13,7 +13,7 @@ export function ContactRu() {
               {[
                 {
                   title: 'Электронная почта',
-                  value: 'support@lunarcarsharing.de',
+                  value: 'support@p2pcarsharing.de',
                   desc: 'Ответим в течение 2 часов',
                 },
                 {
@@ -23,12 +23,12 @@ export function ContactRu() {
                 },
                 {
                   title: 'По вопросам страхования',
-                  value: 'insurance@lunarcarsharing.de',
+                  value: 'insurance@p2pcarsharing.de',
                   desc: 'Круглосуточно',
                 },
                 {
                   title: 'По юридическим вопросам',
-                  value: 'legal@lunarcarsharing.de',
+                  value: 'legal@p2pcarsharing.de',
                   desc: 'Ответим в течение 24 часов',
                 },
               ].map(({ title, value, desc }) => (
@@ -43,7 +43,7 @@ export function ContactRu() {
 
           <Section title="Адрес офиса">
             <div className="p-4 bg-brand-subtle rounded-xl border border-border-default">
-              <p className="text-text-base font-semibold">Lunar Carsharing GmbH</p>
+              <p className="text-text-base font-semibold">P2P Carsharing GmbH</p>
               <p className="text-text-secondary mt-2">Musterstraße 12</p>
               <p className="text-text-secondary">76131 Karlsruhe</p>
               <p className="text-text-secondary">Deutschland</p>

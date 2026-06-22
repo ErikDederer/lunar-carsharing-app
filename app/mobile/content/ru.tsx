@@ -6,12 +6,12 @@ export  function MobileRu() {
 
           <h1 className="text-3xl font-bold text-text-base mb-2">Мобильные приложения</h1>
           <p className="text-text-muted text-sm mb-8">
-            Lunar Carsharing всегда под рукой — арендуй и управляй прямо со смартфона
+            P2P Carsharing всегда под рукой — арендуй и управляй прямо со смартфона
           </p>
 
-          <Section title="Приложение Lunar Carsharing">
+          <Section title="Приложение P2P Carsharing">
             <p>
-              Мобильное приложение Lunar Carsharing доступно для iOS и Android. Все функции платформы —
+              Мобильное приложение P2P Carsharing доступно для iOS и Android. Все функции платформы —
               поиск, бронирование, управление арендой и общение с владельцами — в одном месте.
             </p>
             <div className="mt-6 flex flex-col sm:flex-row gap-4">
@@ -89,7 +89,7 @@ export  function MobileRu() {
 
           <Section title="Веб-версия">
             <p>
-              Если вы предпочитаете использовать платформу через браузер, веб-версия Lunar Carsharing
+              Если вы предпочитаете использовать платформу через браузер, веб-версия P2P Carsharing
               полностью адаптирована для мобильных устройств и работает на любом смартфоне
               без установки приложения.
             </p>
@@ -98,8 +98,8 @@ export  function MobileRu() {
           <Section title="Остались вопросы?" isLast>
             <p className="text-text-secondary">По вопросам работы приложения обращайтесь:</p>
             <div className="mt-4 p-4 bg-brand-subtle rounded-xl border border-border-default">
-              <p className="text-text-base font-medium">Служба поддержки Lunar Carsharing</p>
-              <p className="text-text-secondary mt-1">support@lunarcarsharing.de</p>
+              <p className="text-text-base font-medium">Служба поддержки P2P Carsharing</p>
+              <p className="text-text-secondary mt-1">support@p2pcarsharing.de</p>
               <p className="text-text-secondary">Ответим в течение 2 часов</p>
             </div>
           </Section>

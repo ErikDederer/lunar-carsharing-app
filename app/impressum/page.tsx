@@ -11,7 +11,7 @@ export default function ImpressumPage() {
 
           <Section title="Anbieter">
             <div className="space-y-1">
-              <p className="text-text-base font-semibold">Lunar Carsharing GmbH</p>
+              <p className="text-text-base font-semibold">P2P Carsharing GmbH</p>
               <p>Musterstraße 12</p>
               <p>76131 Karlsruhe</p>
               <p>Deutschland</p>
@@ -27,15 +27,15 @@ export default function ImpressumPage() {
               <div className="flex gap-3">
                 <span className="text-text-muted w-24 shrink-0">E-Mail</span>
                 <a
-                  href="mailto:info@lunarcarsharing.de"
+                  href="mailto:info@p2pcarsharing.de"
                   className="text-text-link hover:underline focus:outline-none focus:ring-2 focus:ring-brand-ring rounded"
                 >
-                  info@lunarcarsharing.de
+                  info@p2pcarsharing.de
                 </a>
               </div>
               <div className="flex gap-3">
                 <span className="text-text-muted w-24 shrink-0">Website</span>
-                <span className="text-text-base">www.lunarcarsharing.de</span>
+                <span className="text-text-base">www.p2pcarsharing.de</span>
               </div>
             </div>
           </Section>

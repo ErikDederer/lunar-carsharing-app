@@ -11,7 +11,7 @@ import { LocationPicker } from '@/components/atoms/map/LocationPicker';
 import { CarCard } from '@/components/search/CarCard';
 import { useSearchPage } from '@/hooks/useSearchPage';
 import { useTranslations } from 'next-intl';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { MapPin, SlidersHorizontal, X } from 'lucide-react';
 
 export default function SearchPage() {
   const t = useTranslations('search');
@@ -27,6 +27,7 @@ export default function SearchPage() {
     applyFilters, resetFilters,
     cars, total, isLoading, isError,
     hasNextPage, isFetchingNextPage, loadMore,
+    isLocating, detectLocation,
   } = useSearchPage();
 
   const FUEL_OPTIONS = [
@@ -53,6 +54,15 @@ export default function SearchPage() {
         <DateRangePicker label={t('rentalDates')} value={dateRange} onChange={setDateRange} />
 
         <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={detectLocation}
+            disabled={isLocating}
+            className="flex items-center gap-1.5 text-xs text-brand hover:text-brand-hover disabled:opacity-50"
+          >
+            <MapPin size={14} />
+            {isLocating ? tCommon('loading') : t('useMyLocation')}
+          </button>
           <LocationPicker
             label={t('location')}
             hint={t('locationHint')}
