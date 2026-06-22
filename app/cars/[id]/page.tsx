@@ -125,7 +125,7 @@ export default function CarDetailPage({ params }: { params: Promise<{ id: string
 
             <div>
               <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-gray-800">${car.pricePerDay}</span>
+                <span className="text-3xl font-bold text-gray-800">€{car.pricePerDay}</span>
                 <span className="text-sm text-gray-400">{t('perDay')}</span>
               </div>
               <p className="text-sm text-gray-400 mt-0.5">

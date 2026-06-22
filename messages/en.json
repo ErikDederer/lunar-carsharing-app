@@ -51,7 +51,7 @@
     "addCar": "+ Add",
     "addFirst": "Add first car",
     "noCars": "You have no cars yet",
-    "pricePerDay": "${price}/day",
+    "pricePerDay": "€{price}/day",
     "published": "Published",
     "status": {
       "active": "Active",
@@ -202,7 +202,7 @@
       "bookNow": "Book now",
       "booked": "✓ Booked",
       "processing": "Processing...",
-      "pricePerDay": "${price} / day",
+      "pricePerDay": "€{price} / day",
       "perDay": "/ day",
       "fuelLabel": "Fuel",
       "gearboxLabel": "Gearbox",
@@ -283,7 +283,7 @@
     "browseCars": "Find a car",
     "cancel": "Cancel",
     "ownerContact": "Owner contacts",
-    "total": "${total}",
+    "total": "€{total}",
     "tabs": {
       "all": "All",
       "active": "Active",
@@ -300,7 +300,7 @@
   "incomingBookings": {
     "title": "Incoming bookings",
     "empty": "No bookings in this category",
-    "total": "${total}",
+    "total": "€{total}",
     "confirm": "Confirm",
     "decline": "Decline",
     "complete": "Complete",

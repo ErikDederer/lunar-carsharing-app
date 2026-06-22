@@ -31,7 +31,7 @@ export default function BookingNewPage() {
       {car && (
         <div className="bg-bg-card rounded-2xl shadow-sm p-5">
           <p className="text-base font-semibold text-text-base">{car.brand} {car.model}</p>
-          <p className="text-sm text-text-muted">${pricePerDay} / {t('perDay')}</p>
+          <p className="text-sm text-text-muted">€{pricePerDay} / {t('perDay')}</p>
         </div>
       )}
 
@@ -54,16 +54,16 @@ export default function BookingNewPage() {
           <Section title={t('priceTitle')}>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex justify-between text-text-secondary">
-                <span>${pricePerDay} × {t('daysSelected', { count: days })}</span>
-                <span>${rentalCost}</span>
+                <span>€{pricePerDay} × {t('daysSelected', { count: days })}</span>
+                <span>€{rentalCost}</span>
               </div>
               <div className="flex justify-between text-text-secondary">
                 <span>{t('deposit')}</span>
-                <span>${deposit}</span>
+                <span>€{deposit}</span>
               </div>
               <div className="flex justify-between border-t border-border-default pt-2 font-semibold text-text-base">
                 <span>{t('total')}</span>
-                <span className="text-brand">${total}</span>
+                <span className="text-brand">€{total}</span>
               </div>
             </div>
           </Section>
