@@ -63,7 +63,7 @@ export function DashboardCarCard({
           <p className="text-xs text-text-muted truncate mt-0.5">{car.address}</p>
           <div className="flex items-center gap-2 mt-1.5">
             <Badge variant={car.status} size="sm" label={statusLabel} className="min-w-0" />
-            <span className="text-xs text-text-base font-semibold">${car.pricePerDay}/день</span>
+            <span className="text-xs text-text-base font-semibold">€{car.pricePerDay}/день</span>
           </div>
         </div>
       </div>

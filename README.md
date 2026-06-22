@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# P2P Carsharing
+
+A peer-to-peer car rental platform where owners list their vehicles and renters can find and book them online.
+
+**Live:** [lunar-carsharing-app.vercel.app](https://lunar-carsharing-app.vercel.app)  
+**API:** [lunar-carsharing-api-ed2j.onrender.com](https://lunar-carsharing-api-ed2j.onrender.com)
+
+---
+
+## Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| Frontend | Next.js 15, React 19, TypeScript |
+| Styling | Tailwind CSS v4 |
+| State | Zustand, TanStack Query |
+| Maps | Leaflet, react-leaflet |
+| i18n | next-intl (EN / DE / RU) |
+| Deployment | Vercel |
+
+---
+
+## Features
+
+- JWT authentication with refresh tokens
+- Car listings with photos and map geolocation
+- Search with filters: dates, fuel type, transmission, price, radius on map
+- Detect current location when searching or adding a car
+- Booking flow with date selection
+- Incoming booking management for owners
+- User profile with avatar upload
+- Car availability management via slot calendar
+- Three languages: English, German, Russian
+
+---
 
 ## Getting Started
 
-First, run the development server:
+```bash
+git clone https://github.com/ErikDederer/lunar-carsharing-app.git
+cd lunar-carsharing-app
+npm install
+```
+
+Create `.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=https://lunar-carsharing-api-ed2j.onrender.com/api/v1
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```
+app/                  # Pages (Next.js App Router)
+components/
+  atoms/              # Base UI components (Input, Button, Map...)
+  cars/               # Car-related components
+  layout/             # Header, Footer, navigation
+hooks/                # useSearchPage, useCarForm, etc.
+services/             # API clients (auth, car, booking...)
+store/                # Zustand stores (auth, settings)
+messages/             # Translations (en, de, ru)
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Related
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Backend (NestJS)](https://github.com/ErikDederer/lunar-carsharing-api) — REST API, Prisma, PostgreSQL, JWT auth

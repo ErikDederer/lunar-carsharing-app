@@ -206,7 +206,7 @@ export function CarForm({ mode, carId }: CarFormProps) {
               value={String(form.pricePerDay)}
               onChange={(v) => setField('pricePerDay', Number(v))}
               onBlur={() => blurField('pricePerDay')}
-              leadingIcon={<span className="text-sm">$</span>}
+              leadingIcon={<span className="text-sm">€</span>}
               error={err('pricePerDay')}
               disabled={isSubmitting}
               required
@@ -217,7 +217,7 @@ export function CarForm({ mode, carId }: CarFormProps) {
               value={String(form.deposit)}
               onChange={(v) => setField('deposit', Number(v))}
               onBlur={() => blurField('deposit')}
-              leadingIcon={<span className="text-sm">$</span>}
+              leadingIcon={<span className="text-sm">€</span>}
               error={err('deposit')}
               disabled={isSubmitting}
               required

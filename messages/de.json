@@ -51,7 +51,7 @@
     "addCar": "+ Hinzufügen",
     "addFirst": "Erstes hinzufügen",
     "noCars": "Sie haben noch keine Autos",
-    "pricePerDay": "${price}/Tag",
+    "pricePerDay": "€{price}/Tag",
     "published": "Veröffentlicht",
     "status": {
       "active": "Aktiv",
@@ -85,7 +85,7 @@
     "found": "Gefunden: {count} Autos",
     "nothingFound": "Nichts gefunden",
     "loadMore": "Mehr anzeigen",
-    "perDayShort": "/T",
+    "perDayShort": "/Tag",
     "loadError": "Autos konnten nicht geladen werden",
     "noReviews": "keine Bewertungen",
     "fuel": {
@@ -202,13 +202,13 @@
       "bookNow": "Jetzt buchen",
       "booked": "✓ Gebucht",
       "processing": "Wird verarbeitet...",
-      "pricePerDay": "${price} / Tag",
+      "pricePerDay": "€{price} / Tag",
       "perDay": "/ Tag",
       "fuelLabel": "Kraftstoff",
       "gearboxLabel": "Getriebe",
       "seatsLabel": "Sitze",
       "paymentProtected": "Ihre Zahlung ist geschützt. Das Geld wird erst nach Mietbeginn an den Besitzer ausgezahlt.",
-      "deposit": "Kaution: ${amount}",
+      "deposit": "Kaution: €{amount}",
       "seats": "{count} Sitzplätze",
       "fuel": {
         "petrol": "Benzin",
@@ -283,7 +283,7 @@
     "browseCars": "Auto finden",
     "cancel": "Stornieren",
     "ownerContact": "Kontakt des Besitzers",
-    "total": "${total}",
+    "total": "€{total}",
     "tabs": {
       "all": "Alle",
       "active": "Aktiv",
@@ -300,7 +300,7 @@
   "incomingBookings": {
     "title": "Eingehende Buchungen",
     "empty": "Keine Buchungen in dieser Kategorie",
-    "total": "${total}",
+    "total": "€{total}",
     "confirm": "Bestätigen",
     "decline": "Ablehnen",
     "complete": "Abschließen",

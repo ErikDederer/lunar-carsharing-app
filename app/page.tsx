@@ -308,7 +308,7 @@ export default function HomePage() {
                     <p className="font-bold text-text-base">{car.brand} {car.model}</p>
                     <p className="text-lg font-bold text-landing-cta-text">
                       €{car.pricePerDay}
-                      <span className="text-xs font-normal text-text-muted">/д</span>
+                      <span className="text-xs font-normal text-text-muted">{t('hero.perDay')}</span>
                     </p>
                   </div>
                   <p className="text-sm text-text-muted mb-3">

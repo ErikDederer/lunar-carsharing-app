@@ -32,7 +32,7 @@ export function CarCard({ car, perDayLabel }: CarCardProps) {
       <p className="text-xs text-text-muted truncate">
         {car.year} · {car.address}
       </p>
-      <p className="text-sm font-semibold text-brand">${car.pricePerDay}{perDayLabel}</p>
+      <p className="text-sm font-semibold text-brand">€{car.pricePerDay}{perDayLabel}</p>
     </Link>
   );
 }

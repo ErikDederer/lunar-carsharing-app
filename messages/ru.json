@@ -51,7 +51,7 @@
     "addCar": "+ Добавить",
     "addFirst": "Добавить первую",
     "noCars": "У вас пока нет машин",
-    "pricePerDay": "${price}/день",
+    "pricePerDay": "€{price}/день",
     "published": "Опубликована",
     "status": {
       "active": "Активна",
@@ -202,7 +202,7 @@
       "bookNow": "Забронировать",
       "booked": "✓ Забронировано",
       "processing": "Обработка...",
-      "pricePerDay": "${price} / день",
+      "pricePerDay": "€{price} / день",
       "perDay": "/ день",
       "fuelLabel": "Топливо",
       "gearboxLabel": "КПП",
@@ -283,7 +283,7 @@
     "browseCars": "Найти машину",
     "cancel": "Отменить",
     "ownerContact": "Контакты владельца",
-    "total": "${total}",
+    "total": "€{total}",
     "tabs": {
       "all": "Все",
       "active": "Активные",
@@ -300,7 +300,7 @@
   "incomingBookings": {
     "title": "Входящие брони",
     "empty": "Нет броней в этой категории",
-    "total": "${total}",
+    "total": "€{total}",
     "confirm": "Подтвердить",
     "decline": "Отклонить",
     "complete": "Завершить",
