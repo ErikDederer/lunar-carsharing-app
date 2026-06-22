@@ -6,12 +6,12 @@ export function AboutRu() {
 
           <h1 className="text-3xl font-bold text-text-base mb-2">О нас</h1>
           <p className="text-text-muted text-sm mb-8">
-            Lunar Carsharing — платформа для аренды автомобилей напрямую у владельцев
+            P2P Carsharing — платформа для аренды автомобилей напрямую у владельцев
           </p>
 
           <Section title="Наша миссия">
             <p>
-              Lunar Carsharing создана с одной целью — сделать аренду автомобиля простой, честной и
+              P2P Carsharing создана с одной целью — сделать аренду автомобиля простой, честной и
               доступной. Мы убираем посредников и соединяем арендаторов напрямую с владельцами
               автомобилей по всей Германии.
             </p>
@@ -74,7 +74,7 @@ export function AboutRu() {
               доверяем сами.
             </p>
             <p className="mt-3">
-              Lunar Carsharing — это портфельный проект, который развивается и улучшается каждый день.
+              P2P Carsharing — это портфельный проект, который развивается и улучшается каждый день.
               Мы открыты к обратной связи и всегда рады вашим предложениям.
             </p>
           </Section>
@@ -82,8 +82,8 @@ export function AboutRu() {
           <Section title="Контакты" isLast>
             <p className="text-text-secondary">Есть вопросы или предложения?</p>
             <div className="mt-4 p-4 bg-brand-subtle rounded-xl border border-border-default">
-              <p className="text-text-base font-medium">Lunar Carsharing GmbH</p>
-              <p className="text-text-secondary mt-1">hello@lunarcarsharing.de</p>
+              <p className="text-text-base font-medium">P2P Carsharing GmbH</p>
+              <p className="text-text-secondary mt-1">hello@p2pcarsharing.de</p>
               <p className="text-text-secondary">Karlsruhe, Deutschland</p>
             </div>
           </Section>

@@ -1,11 +1,11 @@
 @import 'tailwindcss';
 
 :root {
-  --brand: #1e7e34;
-  --brand-hover: #176128;
-  --brand-active: #10461d;
-  --brand-ring: #48c964;
-  --brand-subtle: #f0faf2;
+  --brand: #ea7c11;
+  --brand-hover: #c96209;
+  --brand-active: #9a4807;
+  --brand-ring: #fb923c;
+  --brand-subtle: #fff7ed;
 
   --text-base: #111827;
   --text-secondary: #374151;
@@ -14,10 +14,10 @@
   --text-disabled: #c2c8d0;
   --text-inverse: #ffffff;
   --text-error: #b91c1c;
-  --text-link: #1e7e34;
+  --text-link: #ea7c11;
 
   --border-default: #d1d5db;
-  --border-focus: #1e7e34;
+  --border-focus: #ea7c11;
   --border-error: #dc2626;
   --border-disabled: #e5e7eb;
 
@@ -27,7 +27,7 @@
   --bg-error: #fef2f2;
   --bg-warning: #fff7ed;
 
-  --color-success: #1e7e34;
+  --color-success: #ea7c11;
   --color-error: #b91c1c;
   --color-warning: #92400e;
   --color-error-hover: #991b1b;
@@ -37,9 +37,9 @@
   --landing-dark-text: #ffffff;
   --landing-dark-muted: #9ca3af;
   --landing-dark-border: rgba(255, 255, 255, 0.1);
-  --landing-cta-bg: #48c964;
-  --landing-cta-hover: #32a84d;
-  --landing-cta-text: #1e7e34;
+  --landing-cta-bg: #fb923c;
+  --landing-cta-hover: #ea7c11;
+  --landing-cta-text: #9a4807;
   --landing-cta-btn-bg: rgba(255, 255, 255, 0.2);
   --landing-cta-btn-hover: rgba(255, 255, 255, 0.3);
   --landing-cta-btn-border: rgba(255, 255, 255, 0.3);
