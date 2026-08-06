@@ -21,7 +21,13 @@ export function useDashboardPage() {
     isStartingOnboarding,
     startOnboardingError,
   } = useConnectStatus();
-  const needsPayoutSetup = !isLoadingConnectStatus && !!connectStatus && !connectStatus.payoutsEnabled;
+  // transfersActive (not payoutsEnabled!) is what actually unblocks booking
+  // creation server-side (see BookingsService.createBooking's Connect gate,
+  // which checks StripeAccount.transfersActive) — Stripe can flip
+  // payouts_enabled true before the transfers capability itself is active,
+  // so gating on payoutsEnabled here let owners think they were done while
+  // their cars still couldn't be booked.
+  const needsPayoutSetup = !isLoadingConnectStatus && !!connectStatus && !connectStatus.transfersActive;
 
   const { data: cars = [], isLoading } = useQuery({
     queryKey: ['cars', 'me', userId],

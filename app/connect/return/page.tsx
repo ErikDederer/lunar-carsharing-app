@@ -35,15 +35,16 @@ function ConnectReturnContent() {
     queryKey: ['connect', 'status'],
     queryFn: () => connectService.getStatus(),
     enabled: hydrated && !!token,
+    // transfersActive, not payoutsEnabled — see useDashboardPage.ts.
     refetchInterval: (query) => {
-      if (query.state.data?.payoutsEnabled) return false;
+      if (query.state.data?.transfersActive) return false;
       const attempt = query.state.dataUpdateCount;
       if (attempt >= MAX_ATTEMPTS) return false;
       return BACKOFF_MS[Math.min(attempt, BACKOFF_MS.length - 1)];
     },
   });
 
-  const ready = !!status?.payoutsEnabled;
+  const ready = !!status?.transfersActive;
 
   useEffect(() => {
     if (!ready) return;
