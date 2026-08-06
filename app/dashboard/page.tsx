@@ -5,6 +5,7 @@ import Button from '@/components/atoms/Button';
 import Spinner from '@/components/atoms/Spinner';
 import { Car, Wallet } from 'lucide-react';
 import { DashboardCarCard } from '@/components/dashboard/DashboardCarCard';
+import { PayoutSetupBanner } from '@/components/dashboard/PayoutSetupBanner';
 import { useDashboardPage } from '@/hooks/useDashboardPage';
 import { useTranslations } from 'next-intl';
 
@@ -16,6 +17,7 @@ export default function DashboardPage() {
     cars, isLoading, goToEdit, goToSlots, goToNewCar,
     handleToggleStatus, isTogglingStatus, togglingId,
     handleRemoveCar, isRemoving, removingId,
+    needsPayoutSetup, startOnboarding, isStartingOnboarding, startOnboardingError,
   } = useDashboardPage();
 
   return (
@@ -28,6 +30,14 @@ export default function DashboardPage() {
         </div>
         <Button onClick={goToNewCar}>{t('addCar')}</Button>
       </div>
+
+      {needsPayoutSetup && (
+        <PayoutSetupBanner
+          onStart={() => startOnboarding()}
+          starting={isStartingOnboarding}
+          error={startOnboardingError}
+        />
+      )}
 
       <Link
         href="/dashboard/payouts"
