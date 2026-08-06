@@ -448,5 +448,30 @@
     "pending": "Pending",
     "confirmed": "Confirmed",
     "cancelled": "Cancelled"
+  },
+  "payouts": {
+    "title": "Payouts",
+    "subtitle": "Dashboard",
+    "columnBooking": "Booking",
+    "columnGross": "Gross",
+    "columnFee": "Platform fee",
+    "columnNet": "Payout",
+    "columnStatus": "Status",
+    "columnReleaseDate": "Release date",
+    "statusAll": "All statuses",
+    "status": {
+      "PENDING": "Pending",
+      "PROCESSING": "Processing",
+      "SUCCEEDED": "Paid out",
+      "FAILED": "Failed",
+      "DEAD_LETTER": "Failed"
+    },
+    "periodAll": "All time",
+    "period30d": "Last 30 days",
+    "period90d": "Last 90 days",
+    "empty": "No payouts yet",
+    "emptyFiltered": "No payouts match these filters",
+    "loadError": "Failed to load payouts",
+    "releaseDatePending": "Pending"
   }
 }

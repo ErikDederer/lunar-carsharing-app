@@ -448,5 +448,30 @@
     "pending": "Ausstehend",
     "confirmed": "Bestätigt",
     "cancelled": "Storniert"
+  },
+  "payouts": {
+    "title": "Auszahlungen",
+    "subtitle": "Dashboard",
+    "columnBooking": "Buchung",
+    "columnGross": "Brutto",
+    "columnFee": "Plattformgebühr",
+    "columnNet": "Auszahlung",
+    "columnStatus": "Status",
+    "columnReleaseDate": "Freigabedatum",
+    "statusAll": "Alle Status",
+    "status": {
+      "PENDING": "Ausstehend",
+      "PROCESSING": "In Bearbeitung",
+      "SUCCEEDED": "Ausgezahlt",
+      "FAILED": "Fehlgeschlagen",
+      "DEAD_LETTER": "Fehlgeschlagen"
+    },
+    "periodAll": "Gesamter Zeitraum",
+    "period30d": "Letzte 30 Tage",
+    "period90d": "Letzte 90 Tage",
+    "empty": "Noch keine Auszahlungen",
+    "emptyFiltered": "Keine Auszahlungen für diese Filter",
+    "loadError": "Auszahlungen konnten nicht geladen werden",
+    "releaseDatePending": "Ausstehend"
   }
 }

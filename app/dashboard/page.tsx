@@ -1,14 +1,16 @@
 'use client';
 
+import Link from 'next/link';
 import Button from '@/components/atoms/Button';
 import Spinner from '@/components/atoms/Spinner';
-import { Car } from 'lucide-react';
+import { Car, Wallet } from 'lucide-react';
 import { DashboardCarCard } from '@/components/dashboard/DashboardCarCard';
 import { useDashboardPage } from '@/hooks/useDashboardPage';
 import { useTranslations } from 'next-intl';
 
 export default function DashboardPage() {
   const t = useTranslations('dashboard');
+  const tPayouts = useTranslations('payouts');
   const tCommon = useTranslations('common');
   const {
     cars, isLoading, goToEdit, goToSlots, goToNewCar,
@@ -26,6 +28,14 @@ export default function DashboardPage() {
         </div>
         <Button onClick={goToNewCar}>{t('addCar')}</Button>
       </div>
+
+      <Link
+        href="/dashboard/payouts"
+        className="flex items-center gap-2 rounded-2xl border border-border-default bg-bg-card p-4 text-sm font-medium text-text-secondary shadow-sm hover:bg-gray-50 transition-colors"
+      >
+        <Wallet size={16} className="text-brand" />
+        {tPayouts('title')}
+      </Link>
 
       {isLoading && (
         <div className="flex items-center gap-2 text-sm text-text-muted py-8 justify-center">
