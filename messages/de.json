@@ -448,5 +448,32 @@
     "pending": "Ausstehend",
     "confirmed": "Bestätigt",
     "cancelled": "Storniert"
+  },
+  "connect": {
+    "banner": {
+      "title": "Auszahlungen einrichten",
+      "body": "Verbinden Sie eine Auszahlungsmethode mit Stripe, damit Mieter Ihre Autos buchen können und Sie bezahlt werden.",
+      "cta": "Auszahlungen einrichten"
+    },
+    "gate": {
+      "title": "Richten Sie Auszahlungen ein, bevor Sie ein Auto veröffentlichen",
+      "body": "Sie benötigen ein verbundenes Stripe-Auszahlungskonto, bevor Sie ein Auto veröffentlichen können — Zahlungen der Mieter können nur an ein empfangsbereites Konto ausgezahlt werden.",
+      "cta": "Auszahlungen einrichten"
+    },
+    "return": {
+      "title": "Einrichtung wird abgeschlossen…",
+      "checking": "Ihr Auszahlungsstatus wird geprüft…",
+      "success": "Auszahlungen sind eingerichtet",
+      "successBody": "Alles bereit — Sie können jetzt Autos einstellen und bezahlt werden.",
+      "goToDashboard": "Zum Dashboard",
+      "pending": "Noch in Bearbeitung",
+      "pendingBody": "Stripe verarbeitet Ihre Angaben noch. Das kann einige Minuten dauern — schauen Sie gleich noch einmal vorbei.",
+      "checkAgain": "Erneut prüfen"
+    },
+    "refresh": {
+      "title": "Ihr Einrichtungslink ist abgelaufen",
+      "body": "Onboarding-Links sind nur kurze Zeit gültig. Starten Sie einen neuen, um fortzufahren.",
+      "cta": "Einrichtung fortsetzen"
+    }
   }
 }

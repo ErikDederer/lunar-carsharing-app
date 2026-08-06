@@ -448,5 +448,32 @@
     "pending": "Pending",
     "confirmed": "Confirmed",
     "cancelled": "Cancelled"
+  },
+  "connect": {
+    "banner": {
+      "title": "Finish setting up payouts",
+      "body": "Connect a payout method with Stripe so renters can book your cars and you can get paid.",
+      "cta": "Set up payouts"
+    },
+    "gate": {
+      "title": "Set up payouts before listing a car",
+      "body": "You need a connected Stripe payout account before you can publish a car — renters' payments can only be released to an account that's ready to receive them.",
+      "cta": "Set up payouts"
+    },
+    "return": {
+      "title": "Finishing setup…",
+      "checking": "Checking your payout status…",
+      "success": "Payouts are set up",
+      "successBody": "You're all set — you can now list cars and get paid.",
+      "goToDashboard": "Go to dashboard",
+      "pending": "Still in progress",
+      "pendingBody": "Stripe is still processing your details. This can take a few minutes — check back shortly.",
+      "checkAgain": "Check again"
+    },
+    "refresh": {
+      "title": "Your setup link expired",
+      "body": "Onboarding links only stay valid for a short time. Start a new one to continue.",
+      "cta": "Continue setup"
+    }
   }
 }

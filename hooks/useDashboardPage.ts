@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { carService } from '@/services/car.service';
 import { useAuthStore } from '@/store/auth.store';
+import { useConnectStatus } from '@/hooks/useConnectStatus';
 import type { CarStatus } from '@/types/car';
 
 export function useDashboardPage() {
@@ -12,6 +13,15 @@ export function useDashboardPage() {
   const hydrated = useAuthStore((s) => s._hydrated);
   const userId = useAuthStore((s) => s.user?.id);
   const queryClient = useQueryClient();
+
+  const {
+    data: connectStatus,
+    isLoading: isLoadingConnectStatus,
+    startOnboarding,
+    isStartingOnboarding,
+    startOnboardingError,
+  } = useConnectStatus();
+  const needsPayoutSetup = !isLoadingConnectStatus && !!connectStatus && !connectStatus.payoutsEnabled;
 
   const { data: cars = [], isLoading } = useQuery({
     queryKey: ['cars', 'me', userId],
@@ -68,5 +78,9 @@ export function useDashboardPage() {
     handleRemoveCar,
     isRemoving,
     removingId,
+    needsPayoutSetup,
+    startOnboarding,
+    isStartingOnboarding,
+    startOnboardingError,
   };
 }
