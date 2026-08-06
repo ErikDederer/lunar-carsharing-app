@@ -448,5 +448,43 @@
     "pending": "Ausstehend",
     "confirmed": "Bestätigt",
     "cancelled": "Storniert"
+  },
+  "payments": {
+    "title": "Zahlung",
+    "backToBookings": "Zurück zu meinen Buchungen",
+    "priceBreakdown": "Preisaufschlüsselung",
+    "rental": "Miete",
+    "serviceFeeNote": "Enthält eine Plattformgebühr von {amount}, die von der Auszahlung des Vermieters abgezogen wird — sie wird nicht zu Ihrem Gesamtbetrag addiert.",
+    "deposit": "Kaution",
+    "total": "Heute belasteter Betrag",
+    "holdExplanation": "Ihre Zahlung wird sicher einbehalten und erst nach Abschluss der Miete an den Vermieter ausgezahlt.",
+    "payoutEtaKnown": "Der Vermieter wird am {date} ausgezahlt.",
+    "payoutEtaUnknown": "Der Vermieter wird einige Tage nach Ende Ihrer Miete ausgezahlt.",
+    "depositExplanation": "Die Kaution wird jetzt autorisiert und automatisch freigegeben, sofern kein Schaden vorliegt.",
+    "payButton": "Jetzt bezahlen",
+    "payButtonProcessing": "Wird verarbeitet…",
+    "stateRequiresAction": "Schließen Sie den von Ihrer Bank geforderten Verifizierungsschritt ab…",
+    "stateSucceededTitle": "Zahlung erfolgreich",
+    "stateSucceededDetail": "Ihre Buchung ist bezahlt. Sie erhalten eine Quittung per E-Mail.",
+    "stateFailedTitle": "Zahlung fehlgeschlagen",
+    "retry": "Erneut versuchen",
+    "alreadyPaid": "Diese Buchung wurde bereits bezahlt.",
+    "notConfirmedYet": "Diese Buchung wurde vom Vermieter noch nicht bestätigt — Sie können bezahlen, sobald sie bestätigt ist.",
+    "loadingBooking": "Buchung wird geladen…",
+    "bookingNotFound": "Buchung nicht gefunden.",
+    "errors": {
+      "BOOKING_NOT_CONFIRMED": "Diese Buchung wurde noch nicht bestätigt.",
+      "BOOKING_ALREADY_PAID": "Diese Buchung wurde bereits bezahlt.",
+      "PAYMENT_STILL_PROCESSING": "Ihre vorherige Zahlung wird noch bestätigt — bitte warten Sie einen Moment.",
+      "DEPOSIT_ALREADY_RESOLVED": "Die Kaution für diese Buchung wurde bereits abgewickelt.",
+      "stripe": {
+        "card_declined": "Ihre Karte wurde abgelehnt. Bitte versuchen Sie eine andere Karte.",
+        "expired_card": "Ihre Karte ist abgelaufen. Bitte versuchen Sie eine andere Karte.",
+        "insufficient_funds": "Ihre Karte hat nicht genügend Guthaben.",
+        "incorrect_cvc": "Der Sicherheitscode (CVC) ist falsch.",
+        "processing_error": "Bei der Verarbeitung Ihrer Karte ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+        "authentication_failure": "Ihre Karte konnte bei Ihrer Bank nicht verifiziert werden. Bitte versuchen Sie es erneut."
+      }
+    }
   }
 }

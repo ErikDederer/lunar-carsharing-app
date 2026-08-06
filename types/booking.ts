@@ -1,4 +1,5 @@
 import type { Car } from './car';
+import type { PaymentRecord, DepositRecord } from './payment';
 
 export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
 
@@ -67,6 +68,9 @@ export interface BookingRaw {
   updatedAt: string;
   car?: BookingRawCar | Car;
   renter?: BookingRenter;
+  // Only present when fetched via GET /bookings/:id (bookingService.getById).
+  payment?: PaymentRecord | null;
+  deposit?: DepositRecord | null;
 }
 
 export interface Booking {
@@ -81,6 +85,8 @@ export interface Booking {
   createdAt: string;
   car?: BookingRawCar | Car;
   renter?: BookingRenter;
+  payment?: PaymentRecord | null;
+  deposit?: DepositRecord | null;
 }
 
 export interface BookingStatsCounts {

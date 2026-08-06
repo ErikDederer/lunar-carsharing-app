@@ -1,12 +1,10 @@
 import { apiFetch } from '@/lib/apiFetch';
+import { parseApiError } from '@/lib/apiError';
 import type { Booking, BookingRaw, BookingStats, CreateBookingDto } from '@/types/booking';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await apiFetch(path, options);
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    throw new Error(data?.message ?? `Request failed: ${res.status}`);
-  }
+  if (!res.ok) throw await parseApiError(res);
   return res.json() as Promise<T>;
 }
 
@@ -23,6 +21,8 @@ function normalize(raw: BookingRaw): Booking {
     createdAt: raw.createdAt,
     car: raw.car,
     renter: raw.renter,
+    payment: raw.payment,
+    deposit: raw.deposit,
   };
 }
 
@@ -33,6 +33,9 @@ export const bookingService = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     }).then(normalize),
+
+  getById: (id: string): Promise<Booking> =>
+    request<BookingRaw>(`/bookings/${id}`).then(normalize),
 
   getMy: (): Promise<Booking[]> =>
     request<BookingRaw[]>('/bookings/my').then((list) => list.map(normalize)),
