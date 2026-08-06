@@ -31,7 +31,10 @@ function CarNewGate() {
     );
   }
 
-  if (!status?.payoutsEnabled) {
+  // transfersActive is what BookingsService.createBooking actually gates
+  // on — see useDashboardPage.ts for why payoutsEnabled isn't the right
+  // signal here.
+  if (!status?.transfersActive) {
     return (
       <PayoutSetupRequired
         onStart={() => startOnboarding()}
