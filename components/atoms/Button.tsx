@@ -1,4 +1,5 @@
 import React from 'react';
+import { ShimmerLayers, shimmerHostClass, shimmerVars } from '@/components/ui/shimmer-layers';
 
 type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'danger-outline' | 'ghost' | 'green';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -16,13 +17,24 @@ interface ButtonProps {
   className?: string;
 }
 
+// Filled variants get the running edge light (ShimmerLayers) and a
+// coloured drop shadow; the fill is the --bg variable so hover/active can
+// change it underneath the light.
+const FILLED: ButtonVariant[] = ['primary', 'green', 'danger'];
+
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-brand text-text-inverse hover:bg-brand-hover active:bg-brand-active border border-transparent',
-  secondary: 'bg-bg-card text-text-base hover:bg-gray-50 active:bg-gray-100 border border-border-default',
-  danger: 'bg-red-700 text-text-inverse hover:bg-red-800 active:bg-red-900 border border-transparent',
-  'danger-outline': 'bg-transparent text-red-600 hover:bg-red-50 active:bg-red-100 border border-red-300 hover:border-red-400',
-  ghost: 'bg-transparent text-text-secondary hover:bg-gray-100 active:bg-gray-200 border border-transparent',
-  green: 'bg-brand text-text-inverse hover:bg-brand-hover active:bg-brand-active border border-transparent',
+  primary:
+    'text-text-inverse border border-white/10 [--bg:var(--brand)] hover:[--bg:var(--brand-hover)] active:[--bg:var(--brand-active)] shadow-[0_6px_16px_-6px_rgba(234,124,17,0.55)] hover:shadow-[0_10px_22px_-8px_rgba(234,124,17,0.6)]',
+  green:
+    'text-text-inverse border border-white/10 [--bg:var(--brand)] hover:[--bg:var(--brand-hover)] active:[--bg:var(--brand-active)] shadow-[0_6px_16px_-6px_rgba(234,124,17,0.55)] hover:shadow-[0_10px_22px_-8px_rgba(234,124,17,0.6)]',
+  danger:
+    'text-text-inverse border border-white/10 [--bg:#b91c1c] hover:[--bg:#991b1b] active:[--bg:#7f1d1d] shadow-[0_6px_16px_-6px_rgba(185,28,28,0.5)]',
+  secondary:
+    'text-text-base border border-border-default bg-gradient-to-b from-white to-gray-50 hover:to-gray-100 active:from-gray-50 shadow-[inset_0_1px_0_#fff,0_1px_2px_rgba(16,24,40,0.06),0_4px_10px_-6px_rgba(16,24,40,0.18)]',
+  'danger-outline':
+    'text-red-600 border border-red-300 hover:border-red-400 bg-gradient-to-b from-white to-red-50/40 hover:to-red-50 shadow-[inset_0_1px_0_#fff,0_1px_2px_rgba(16,24,40,0.05)]',
+  ghost:
+    'bg-transparent text-text-secondary hover:bg-gray-100 active:bg-gray-200 border border-transparent',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -67,15 +79,19 @@ export const Button: React.FC<ButtonProps> = ({
   className = '',
 }) => {
   const isDisabled = disabled || loading;
+  const filled = FILLED.includes(variant);
 
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={isDisabled}
+      style={filled ? shimmerVars({ radius: '0.5rem' }) : undefined}
       className={[
         'inline-flex items-center justify-center font-medium rounded-lg',
-        'transition-colors duration-150 ease-in-out',
+        filled ? shimmerHostClass : '',
+        'transition-[transform,box-shadow,background-color,border-color] duration-200 ease-out',
+        'hover:-translate-y-px active:translate-y-0 motion-reduce:hover:translate-y-0',
         'focus-visible:ring-2 focus-visible:ring-brand-ring focus-visible:ring-offset-2',
         'select-none cursor-pointer',
         variantStyles[variant],
@@ -88,6 +104,7 @@ export const Button: React.FC<ButtonProps> = ({
       aria-busy={loading}
       aria-disabled={isDisabled}
     >
+      {filled && <ShimmerLayers />}
       {loading ? (
         <Spinner size={size} />
       ) : leftIcon ? (

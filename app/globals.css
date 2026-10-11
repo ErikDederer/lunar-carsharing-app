@@ -49,6 +49,16 @@
 }
 
 @theme inline {
+  /* Depth: softer, layered shadows for every shadow-* utility (cards,
+     header, menus, toasts). Each = a tight contact shadow + a wide soft
+     ambient one, slightly warm-tinted to sit with the brand orange. */
+  --shadow-xs: 0 1px 2px rgba(17, 24, 39, 0.05);
+  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05), 0 4px 12px -6px rgba(17, 24, 39, 0.12);
+  --shadow-md: 0 2px 4px -1px rgba(17, 24, 39, 0.06), 0 10px 24px -10px rgba(17, 24, 39, 0.18);
+  --shadow-lg: 0 4px 8px -2px rgba(17, 24, 39, 0.06), 0 18px 36px -14px rgba(60, 30, 10, 0.22);
+  --shadow-xl: 0 8px 16px -6px rgba(17, 24, 39, 0.08), 0 28px 56px -20px rgba(60, 30, 10, 0.28);
+  --shadow-2xl: 0 12px 24px -8px rgba(17, 24, 39, 0.1), 0 40px 80px -28px rgba(60, 30, 10, 0.35);
+
   --color-background: var(--bg-page);
   --color-foreground: var(--text-base);
   --font-sans: var(--font-geist-sans);

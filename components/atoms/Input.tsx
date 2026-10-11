@@ -42,7 +42,7 @@ export const Input: React.FC<InputProps> = ({
   const hasError = Boolean(error);
 
   const wrapperBase =
-    'flex items-center gap-2 w-full rounded-lg border px-3 h-10 transition-colors duration-150';
+    'flex items-center gap-2 w-full rounded-lg border px-3 h-10 transition-[border-color,box-shadow] duration-150 shadow-[inset_0_1px_2px_rgba(17,24,39,0.06)]';
 
   const wrapperState = disabled
     ? 'border-border-disabled bg-bg-disabled cursor-not-allowed'
@@ -118,7 +118,6 @@ export const Input: React.FC<InputProps> = ({
       {error && (
         <p id={errorId} className="text-xs text-text-error flex items-center gap-1">
           <svg
-          
             className="w-3.5 h-3.5 shrink-0"
             viewBox="0 0 16 16"
             fill="currentColor"
