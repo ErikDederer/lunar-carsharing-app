@@ -1,16 +1,27 @@
 'use client';
 
+import { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Car, Shield, CreditCard, Clock, MapPin, ChevronRight, CheckCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import StarRating from '@/components/atoms/StarRating';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
 import { carService } from '@/services/car.service';
+import { ShimmerButton } from '@/components/ui/shimmer-button';
+import { AnimatedShinyText } from '@/components/ui/animated-shiny-text';
+import { Reveal } from '@/components/motion/Reveal';
+import { CountUp } from '@/components/motion/CountUp';
+import { SpotlightCard } from '@/components/motion/SpotlightCard';
+import { gsap, MOTION_OK, useGSAP } from '@/lib/gsap';
 
 export default function HomePage() {
   const t = useTranslations('landing');
+  const router = useRouter();
+  const heroRef = useRef<HTMLElement>(null);
+  const heroCardRef = useRef<HTMLDivElement>(null);
 
   const stats = [
     { value: '2,400+', label: t('stats.cars') },
@@ -37,6 +48,76 @@ export default function HomePage() {
     queryFn: () => carService.getAll({ limit: 3 }),
   });
   const cars = carsData?.cars ?? [];
+  const heroCarId = cars[0]?.id;
+
+  // Hero entrance: copy rises in line by line, the accent underline draws
+  // itself, then the CTA row and social proof follow.
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add(MOTION_OK, () => {
+        const underline = heroRef.current?.querySelector<SVGPathElement>('[data-underline]');
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        tl.from('[data-hero="item"]', { y: 28, autoAlpha: 0, duration: 0.8, stagger: 0.09 });
+        if (underline) {
+          const length = underline.getTotalLength();
+          tl.fromTo(
+            underline,
+            { strokeDasharray: length, strokeDashoffset: length },
+            { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut' },
+            0.45,
+          );
+        }
+      });
+      return () => mm.revert();
+    },
+    { scope: heroRef },
+  );
+
+  // The showcase card arrives once the first car is loaded, then floats.
+  useGSAP(
+    () => {
+      if (!heroCarId) return;
+      const mm = gsap.matchMedia();
+      mm.add(MOTION_OK, () => {
+        const card = heroCardRef.current;
+        if (!card) return;
+        gsap
+          .timeline()
+          .from(card.querySelector('[data-hero="card"]'), {
+            x: 60,
+            rotate: 3,
+            autoAlpha: 0,
+            duration: 0.9,
+            ease: 'power3.out',
+          })
+          .from(
+            card.querySelectorAll('[data-hero="chip"]'),
+            { scale: 0.6, autoAlpha: 0, duration: 0.5, ease: 'back.out(2)', stagger: 0.12 },
+            '-=0.4',
+          );
+        gsap.to(card.querySelector('[data-hero="card"]'), {
+          y: -10,
+          duration: 2.8,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+          delay: 1,
+        });
+        gsap.to(card.querySelectorAll('[data-hero="chip"]'), {
+          y: 6,
+          duration: 2.2,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+          stagger: 0.4,
+          delay: 1.2,
+        });
+      });
+      return () => mm.revert();
+    },
+    { scope: heroCardRef, dependencies: [heroCarId], revertOnUpdate: true },
+  );
 
   const ownerStats = [
     { value: t('owners.stat1Value'), label: t('owners.stat1Label'), sub: t('owners.stat1Sub') },
@@ -112,45 +193,55 @@ export default function HomePage() {
         </div>
       </nav>
 
-      <section className="pt-44 md:pt-32 pb-20 px-6">
+      <section ref={heroRef} className="pt-44 md:pt-32 pb-20 px-6 overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-flex items-center gap-2 bg-brand-subtle text-landing-cta-text text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+              <div
+                data-hero="item"
+                className="inline-flex items-center gap-2 bg-brand-subtle text-landing-cta-text text-xs font-semibold px-3 py-1.5 rounded-full mb-6 border border-brand/15"
+              >
                 <span className="w-2 h-2 rounded-full bg-landing-cta-bg animate-pulse" />
-                {t('hero.badge')}
+                <AnimatedShinyText className="mx-0 max-w-none text-landing-cta-text via-orange-300" shimmerWidth={120}>
+                  {t('hero.badge')}
+                </AnimatedShinyText>
               </div>
 
               <h1 className="text-5xl lg:text-6xl font-bold text-text-base leading-tight tracking-tight mb-6">
-                {t('hero.titleStart')}{' '}
-                <span className="text-landing-cta-text relative">
+                <span data-hero="item" className="inline-block">{t('hero.titleStart')}</span>{' '}
+                <span data-hero="item" className="inline-block text-landing-cta-text relative">
                   {t('hero.titleAccent')}
                   <svg className="absolute -bottom-1 left-0 w-full" height="6" viewBox="0 0 200 6">
                     <path
+                      data-underline
                       d="M0 5 Q100 0 200 5"
                       stroke="var(--landing-cta-bg)"
                       strokeWidth="3"
                       fill="none"
-                      opacity="0.4"
+                      opacity="0.6"
                       strokeLinecap="round"
                     />
                   </svg>
                 </span>{' '}
-                {t('hero.titleEnd')}
+                <span data-hero="item" className="inline-block">{t('hero.titleEnd')}</span>
               </h1>
 
-              <p className="text-lg text-text-muted leading-relaxed mb-8 max-w-lg">
+              <p data-hero="item" className="text-lg text-text-muted leading-relaxed mb-8 max-w-lg">
                 {t('hero.subtitle')}
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 mb-10">
-                <Link
-                  href="/search"
-                  className="flex items-center justify-center gap-2 bg-landing-cta-bg text-text-base font-semibold px-6 py-3.5 rounded-xl hover:bg-landing-cta-hover transition-colors"
+              <div data-hero="item" className="flex flex-col sm:flex-row gap-3 mb-10">
+                <ShimmerButton
+                  onClick={() => router.push('/search')}
+                  background="var(--brand)"
+                  shimmerColor="#fff7ed"
+                  shimmerDuration="2.6s"
+                  borderRadius="12px"
+                  className="gap-2 px-6 py-3.5 font-semibold text-white shadow-lg shadow-brand/25 hover:-translate-y-0.5 transition-transform"
                 >
                   {t('hero.findCar')}
-                  <ChevronRight size={18} />
-                </Link>
+                  <ChevronRight size={18} className="transition-transform group-hover:translate-x-0.5" />
+                </ShimmerButton>
                 <Link
                   href="/login?tab=register"
                   className="flex items-center justify-center gap-2 border border-border-default text-text-secondary font-semibold px-6 py-3.5 rounded-xl hover:bg-bg-page transition-colors"
@@ -159,7 +250,7 @@ export default function HomePage() {
                 </Link>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div data-hero="item" className="flex items-center gap-4">
                 <div className="flex -space-x-2">
                   {['ОВ', 'АП', 'МР', 'ДС'].map((init) => (
                     <div
@@ -181,11 +272,12 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative">
-              <div className="absolute inset-0 bg-brand-subtle rounded-3xl" />
+            <div ref={heroCardRef} className="relative">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-subtle via-brand-subtle to-orange-100" />
+              <div aria-hidden="true" className="absolute -top-10 -right-10 h-48 w-48 rounded-full bg-brand/20 blur-3xl" />
               <div className="relative p-8">
                 {cars[0] && (
-                <div className="bg-bg-card rounded-2xl shadow-xl border border-border-default p-5 mb-4">
+                <div data-hero="card" className="bg-bg-card rounded-2xl shadow-2xl shadow-brand/10 border border-border-default p-5 mb-4">
                   <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-bg-page">
                     {cars[0].mainPhoto && (
                       <Image
@@ -216,12 +308,12 @@ export default function HomePage() {
                 </div>
                 )}
 
-                <div className="absolute -top-4 -right-4 bg-bg-card rounded-xl shadow-lg border border-border-default px-4 py-3 flex items-center gap-2">
+                <div data-hero="chip" className="absolute -top-4 -right-4 bg-bg-card rounded-xl shadow-lg border border-border-default px-4 py-3 flex items-center gap-2">
                   <CheckCircle size={16} className="text-landing-cta-bg" />
                   <span className="text-xs font-semibold text-text-base">{t('hero.verified')}</span>
                 </div>
 
-                <div className="absolute -bottom-4 -left-4 bg-bg-card rounded-xl shadow-lg border border-border-default px-4 py-3">
+                <div data-hero="chip" className="absolute -bottom-4 -left-4 bg-bg-card rounded-xl shadow-lg border border-border-default px-4 py-3">
                   <p className="text-xs text-text-muted">{t('hero.responseTime')}</p>
                   <p className="text-xs font-semibold text-text-base">{t('hero.responseValue')}</p>
                 </div>
@@ -233,14 +325,16 @@ export default function HomePage() {
 
       <section className="py-12 bg-bg-page border-y border-border-default">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          <Reveal className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map(({ value, label }) => (
               <div key={label} className="text-center">
-                <p className="text-3xl font-bold text-text-base mb-1">{value}</p>
+                <p className="text-3xl font-bold text-text-base mb-1 tabular-nums">
+                  <CountUp value={value} />
+                </p>
                 <p className="text-sm text-text-muted">{label}</p>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -254,17 +348,17 @@ export default function HomePage() {
             <p className="text-text-muted max-w-md mx-auto">{t('how.subtitle')}</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <Reveal className="grid md:grid-cols-3 gap-8" stagger={0.15}>
             {steps.map(({ num, title, desc }) => (
-              <div key={num}>
-                <div className="w-12 h-12 rounded-2xl bg-brand-subtle flex items-center justify-center mb-4">
+              <div key={num} className="group">
+                <div className="w-12 h-12 rounded-2xl bg-brand-subtle flex items-center justify-center mb-4 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110">
                   <span className="text-lg font-bold text-landing-cta-text">{num}</span>
                 </div>
                 <h3 className="text-xl font-bold text-text-base mb-2">{title}</h3>
                 <p className="text-text-muted leading-relaxed">{desc}</p>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -285,12 +379,12 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <Reveal className="grid md:grid-cols-3 gap-6" watch={cars.map((c) => c.id).join()}>
             {cars.map((car) => (
               <Link
                 key={car.id}
                 href={`/cars/${car.id}`}
-                className="bg-bg-card rounded-2xl border border-border-default overflow-hidden hover:shadow-lg hover:border-brand transition-all group"
+                className="bg-bg-card rounded-2xl border border-border-default overflow-hidden hover:shadow-xl hover:-translate-y-1 hover:border-brand transition-all duration-300 group"
               >
                 <div className="relative aspect-video overflow-hidden bg-bg-page">
                   {car.mainPhoto && (
@@ -299,7 +393,7 @@ export default function HomePage() {
                       alt={`${car.brand} ${car.model}`}
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover transition-transform group-hover:scale-105"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                     />
                   )}
                 </div>
@@ -317,7 +411,7 @@ export default function HomePage() {
                 </div>
               </Link>
             ))}
-          </div>
+          </Reveal>
 
           <div className="mt-8 text-center md:hidden">
             <Link
@@ -339,20 +433,20 @@ export default function HomePage() {
             <h2 className="text-4xl font-bold text-text-base">{t('features.title')}</h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Reveal className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" stagger={0.1}>
             {features.map(({ icon, title, desc }) => (
-              <div
+              <SpotlightCard
                 key={title}
-                className="p-6 rounded-2xl border border-border-default hover:border-brand hover:shadow-md transition-all"
+                className="p-6 rounded-2xl border border-border-default bg-bg-card hover:border-brand/60"
               >
                 <div className="w-10 h-10 rounded-xl bg-brand-subtle flex items-center justify-center text-landing-cta-bg mb-4">
                   {icon}
                 </div>
                 <h3 className="font-bold text-text-base mb-2">{title}</h3>
                 <p className="text-sm text-text-muted leading-relaxed">{desc}</p>
-              </div>
+              </SpotlightCard>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -367,14 +461,14 @@ export default function HomePage() {
                 {t('owners.title')}
               </h2>
               <p className="text-landing-dark-muted leading-relaxed mb-8">{t('owners.subtitle')}</p>
-              <div className="flex flex-col gap-3 mb-8">
+              <Reveal className="flex flex-col gap-3 mb-8" stagger={0.12}>
                 {[t('owners.benefit1'), t('owners.benefit2'), t('owners.benefit3')].map((item) => (
                   <div key={item} className="flex items-center gap-3">
                     <CheckCircle size={18} className="text-landing-cta-bg shrink-0" />
                     <span className="text-landing-dark-muted text-sm">{item}</span>
                   </div>
                 ))}
-              </div>
+              </Reveal>
               <Link
                 href="/login?tab=register"
                 className="inline-flex items-center gap-2 bg-landing-cta-bg text-text-base font-semibold px-6 py-3.5 rounded-xl hover:bg-landing-cta-hover transition-colors"
@@ -384,18 +478,20 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <Reveal className="grid grid-cols-2 gap-4" stagger={0.1}>
               {ownerStats.map(({ value, label, sub }) => (
                 <div
                   key={label}
-                  className="bg-landing-dark-card border border-landing-dark-border rounded-2xl p-5"
+                  className="bg-landing-dark-card border border-landing-dark-border rounded-2xl p-5 transition-colors duration-300 hover:border-landing-cta-bg/50 hover:bg-white/[0.08]"
                 >
-                  <p className="text-2xl font-bold text-landing-cta-bg mb-1">{value}</p>
+                  <p className="text-2xl font-bold text-landing-cta-bg mb-1 tabular-nums">
+                    <CountUp value={value} />
+                  </p>
                   <p className="text-sm font-semibold text-landing-dark-text mb-1">{label}</p>
                   <p className="text-xs text-landing-dark-muted">{sub}</p>
                 </div>
               ))}
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>

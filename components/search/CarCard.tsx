@@ -12,7 +12,7 @@ export function CarCard({ car, perDayLabel }: CarCardProps) {
   return (
     <Link
       href={`/cars/${car.id}`}
-      className="border border-border-default rounded-xl p-3 flex flex-col gap-2 cursor-pointer hover:border-brand-subtle hover:shadow-[0_4px_24px_rgba(72,201,100,0.1)] transition-all"
+      className="group bg-bg-card border border-border-default rounded-xl p-3 flex flex-col gap-2 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:border-brand/50 hover:shadow-[0_12px_32px_-8px_rgba(234,124,17,0.28)] motion-reduce:hover:translate-y-0"
     >
       <div className="w-full aspect-video bg-brand-subtle rounded-lg flex items-center justify-center text-brand overflow-hidden">
         {car.mainPhoto ? (
@@ -20,13 +20,13 @@ export function CarCard({ car, perDayLabel }: CarCardProps) {
           <img
             src={car.mainPhoto}
             alt={`${car.brand} ${car.model}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
           />
         ) : (
           <CarIcon size={32} />
         )}
       </div>
-      <p className="text-sm font-medium text-text-base truncate">
+      <p className="text-sm font-medium text-text-base truncate transition-colors group-hover:text-brand">
         {car.brand} {car.model}
       </p>
       <p className="text-xs text-text-muted truncate">

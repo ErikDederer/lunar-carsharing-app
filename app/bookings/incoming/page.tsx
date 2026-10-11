@@ -9,6 +9,7 @@ import { useIncomingBookingsPage, type IncomingFilterTab } from '@/hooks/useInco
 import { useMarkStatsSeen } from '@/hooks/useMarkStatsSeen';
 import { Toast } from '@/components/common/Toast';
 import { errorMessage } from '@/lib/errorMessage';
+import { Reveal } from '@/components/motion/Reveal';
 
 const TAB_KEYS: IncomingFilterTab[] = ['all', 'pending', 'confirmed'];
 
@@ -66,7 +67,7 @@ export default function IncomingBookingsPage() {
         )}
 
         {!isLoading && !isError && bookings.length > 0 && (
-          <div className="flex flex-col gap-3">
+          <Reveal className="flex flex-col gap-3" watch={bookings.map((b) => b.id).join()}>
             {bookings.map((booking) => (
               <BookingIncomingItem
                 key={booking.id}
@@ -78,7 +79,7 @@ export default function IncomingBookingsPage() {
                 disabled={isMutating}
               />
             ))}
-          </div>
+          </Reveal>
         )}
       </div>
       {actionError !== null && (
