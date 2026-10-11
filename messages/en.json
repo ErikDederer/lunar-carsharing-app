@@ -475,5 +475,43 @@
       "body": "Onboarding links only stay valid for a short time. Start a new one to continue.",
       "cta": "Continue setup"
     }
+  },
+  "payments": {
+    "title": "Payment",
+    "backToBookings": "Back to my bookings",
+    "priceBreakdown": "Price breakdown",
+    "rental": "Rental",
+    "serviceFeeNote": "Includes a {amount} platform service fee, deducted from the owner's payout — it isn't added to your total.",
+    "deposit": "Security deposit",
+    "total": "Total charged today",
+    "holdExplanation": "Your payment is held securely and released to the owner only after the rental is completed.",
+    "payoutEtaKnown": "The owner will be paid on {date}.",
+    "payoutEtaUnknown": "The owner is paid a few days after your rental ends.",
+    "depositExplanation": "The deposit is authorized now and released automatically if there's no damage.",
+    "payButton": "Pay now",
+    "payButtonProcessing": "Processing…",
+    "stateRequiresAction": "Complete the verification step required by your bank…",
+    "stateSucceededTitle": "Payment successful",
+    "stateSucceededDetail": "Your booking is paid. You'll get a receipt by email.",
+    "stateFailedTitle": "Payment failed",
+    "retry": "Try again",
+    "alreadyPaid": "This booking has already been paid.",
+    "notConfirmedYet": "This booking hasn't been confirmed by the owner yet — you'll be able to pay once it is.",
+    "loadingBooking": "Loading booking…",
+    "bookingNotFound": "Booking not found.",
+    "errors": {
+      "BOOKING_NOT_CONFIRMED": "This booking hasn't been confirmed yet.",
+      "BOOKING_ALREADY_PAID": "This booking has already been paid.",
+      "PAYMENT_STILL_PROCESSING": "Your previous payment is still being confirmed — please wait a moment.",
+      "DEPOSIT_ALREADY_RESOLVED": "The deposit for this booking has already been resolved.",
+      "stripe": {
+        "card_declined": "Your card was declined. Please try a different card.",
+        "expired_card": "Your card has expired. Please try a different card.",
+        "insufficient_funds": "Your card has insufficient funds.",
+        "incorrect_cvc": "The security code (CVC) is incorrect.",
+        "processing_error": "Something went wrong processing your card. Please try again.",
+        "authentication_failure": "We couldn't verify your card with your bank. Please try again."
+      }
+    }
   }
 }
