@@ -294,8 +294,16 @@
       "PENDING": "Pending",
       "CONFIRMED": "Confirmed",
       "COMPLETED": "Completed",
-      "CANCELLED": "Cancelled"
-    }
+      "CANCELLED": "Cancelled",
+      "IN_PROGRESS": "In progress",
+      "EXPIRED": "Expired"
+    },
+    "paidAll": "Paid, deposit secured",
+    "depositNext": "Paid — deposit still to be secured",
+    "payBy": "Pay by {date}",
+    "payNowHint": "Confirmed — waiting for your payment",
+    "payNow": "Pay now",
+    "placeDeposit": "Deposit"
   },
   "incomingBookings": {
     "title": "Incoming bookings",
@@ -303,7 +311,7 @@
     "total": "€{total}",
     "confirm": "Confirm",
     "decline": "Decline",
-    "complete": "Complete",
+    "complete": "Car returned",
     "tabs": {
       "all": "All",
       "pending": "Pending",
@@ -313,8 +321,16 @@
       "PENDING": "Pending",
       "CONFIRMED": "Confirmed",
       "COMPLETED": "Completed",
-      "CANCELLED": "Declined"
-    }
+      "CANCELLED": "Declined",
+      "IN_PROGRESS": "In progress",
+      "EXPIRED": "Expired"
+    },
+    "paid": "Paid, deposit secured",
+    "paidDepositPending": "Paid — deposit pending",
+    "awaitingPayment": "Waiting for the renter to pay",
+    "pickup": "Hand over car",
+    "pickupFromStart": "Handover is possible from the start of the rental.",
+    "cancelBooking": "Cancel"
   },
   "slots": {
     "alwaysAvailable": "Always available",
@@ -512,7 +528,7 @@
     "holdExplanation": "Your payment is held securely and released to the owner only after the rental is completed.",
     "payoutEtaKnown": "The owner will be paid on {date}.",
     "payoutEtaUnknown": "The owner is paid a few days after your rental ends.",
-    "depositExplanation": "The deposit is authorized now and released automatically if there's no damage.",
+    "depositExplanation": "The deposit is only reserved on your card (or charged and refunded in full for long rentals) and released automatically if there is no damage.",
     "payButton": "Pay now",
     "payButtonProcessing": "Processing…",
     "stateRequiresAction": "Complete the verification step required by your bank…",
@@ -536,7 +552,42 @@
         "incorrect_cvc": "The security code (CVC) is incorrect.",
         "processing_error": "Something went wrong processing your card. Please try again.",
         "authentication_failure": "We couldn't verify your card with your bank. Please try again."
-      }
-    }
+      },
+      "BOOKING_PAYMENT_EXPIRED": "The payment deadline for this booking has passed."
+    },
+    "totalRental": "Rental total",
+    "depositSeparately": "The deposit is secured in a separate step and returned after the rental.",
+    "stepPayment": "Pay the rental",
+    "stepDeposit": "Secure the deposit",
+    "confirmingPayment": "Confirming your payment…",
+    "confirmingDeposit": "Confirming your deposit…",
+    "payBy": "Please pay by {date} — otherwise the booking expires.",
+    "depositSecuredTitle": "Deposit secured",
+    "depositSecuredDetail": "You are all set — the owner can hand over the car.",
+    "depositAfterPayment": "Available right after the rental payment.",
+    "depositOpensAt": "The deposit can be secured from {date} — close to the start, so the card hold covers your whole rental.",
+    "depositButton": "Secure deposit",
+    "depositHoldHint": "The amount is only reserved on your card, not charged.",
+    "depositChargeHint": "For longer rentals the deposit is charged and refunded in full after the rental.",
+    "securedByStripe": "Payments are processed securely by Stripe",
+    "testCardHint": "Test mode: card 4242 4242 4242 4242, any future date, any CVC"
+  },
+  "errors": {
+    "ACCOUNT_BLOCKED": "Your account is blocked.",
+    "INVALID_OR_EXPIRED_TOKEN": "This link is invalid or has expired.",
+    "ACCOUNT_HAS_OBLIGATIONS": "Finish or cancel your active bookings and payments first.",
+    "CAR_UNAVAILABLE": "This car is currently not available.",
+    "CAR_HAS_ACTIVE_BOOKINGS": "This car has active bookings — cancel them first.",
+    "CONNECT_ONBOARDING_INCOMPLETE": "The owner has not finished payout setup yet, so this car cannot be booked.",
+    "BOOKING_DATES_UNAVAILABLE": "These dates are no longer available.",
+    "BOOKING_INVALID_STATE": "This action is not possible for the booking right now.",
+    "BOOKING_NOT_CONFIRMED": "The booking has not been confirmed yet.",
+    "BOOKING_PAYMENT_EXPIRED": "The payment deadline has passed.",
+    "BOOKING_ALREADY_PAID": "This booking has already been paid.",
+    "PAYMENT_STILL_PROCESSING": "The payment is still being confirmed.",
+    "BOOKING_NOT_STARTED": "The rental has not started yet.",
+    "BOOKING_NOT_PAID": "The rental has not been paid yet.",
+    "BOOKING_DEPOSIT_MISSING": "The deposit has not been secured yet.",
+    "DEPOSIT_ALREADY_RESOLVED": "The deposit has already been settled."
   }
 }

@@ -7,6 +7,7 @@ import { Select } from '@/components/atoms/Select';
 const LANGUAGES = [
   { value: 'de', label: 'DE' },
   { value: 'en', label: 'EN' },
+  { value: 'ru', label: 'RU' },
 ];
 
 export function LanguageSwitcher() {
