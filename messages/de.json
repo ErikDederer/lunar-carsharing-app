@@ -294,8 +294,16 @@
       "PENDING": "Ausstehend",
       "CONFIRMED": "Bestätigt",
       "COMPLETED": "Abgeschlossen",
-      "CANCELLED": "Storniert"
-    }
+      "CANCELLED": "Storniert",
+      "IN_PROGRESS": "Läuft",
+      "EXPIRED": "Abgelaufen"
+    },
+    "paidAll": "Bezahlt, Kaution hinterlegt",
+    "depositNext": "Bezahlt — Kaution noch offen",
+    "payBy": "Zahlen bis {date}",
+    "payNowHint": "Bestätigt — wartet auf deine Zahlung",
+    "payNow": "Jetzt bezahlen",
+    "placeDeposit": "Kaution"
   },
   "incomingBookings": {
     "title": "Eingehende Buchungen",
@@ -303,7 +311,7 @@
     "total": "€{total}",
     "confirm": "Bestätigen",
     "decline": "Ablehnen",
-    "complete": "Abschließen",
+    "complete": "Auto zurück",
     "tabs": {
       "all": "Alle",
       "pending": "Ausstehend",
@@ -313,8 +321,16 @@
       "PENDING": "Ausstehend",
       "CONFIRMED": "Bestätigt",
       "COMPLETED": "Abgeschlossen",
-      "CANCELLED": "Abgelehnt"
-    }
+      "CANCELLED": "Abgelehnt",
+      "IN_PROGRESS": "Läuft",
+      "EXPIRED": "Abgelaufen"
+    },
+    "paid": "Bezahlt, Kaution hinterlegt",
+    "paidDepositPending": "Bezahlt — Kaution ausstehend",
+    "awaitingPayment": "Wartet auf Zahlung des Mieters",
+    "pickup": "Auto übergeben",
+    "pickupFromStart": "Die Übergabe ist ab Mietbeginn möglich.",
+    "cancelBooking": "Stornieren"
   },
   "slots": {
     "alwaysAvailable": "Immer verfügbar",
@@ -500,5 +516,78 @@
       "body": "Onboarding-Links sind nur kurze Zeit gültig. Starten Sie einen neuen, um fortzufahren.",
       "cta": "Einrichtung fortsetzen"
     }
+  },
+  "payments": {
+    "title": "Zahlung",
+    "backToBookings": "Zurück zu meinen Buchungen",
+    "priceBreakdown": "Preisaufschlüsselung",
+    "rental": "Miete",
+    "serviceFeeNote": "Enthält eine Plattformgebühr von {amount}, die von der Auszahlung des Vermieters abgezogen wird — sie wird nicht zu Ihrem Gesamtbetrag addiert.",
+    "deposit": "Kaution",
+    "total": "Heute belasteter Betrag",
+    "holdExplanation": "Ihre Zahlung wird sicher einbehalten und erst nach Abschluss der Miete an den Vermieter ausgezahlt.",
+    "payoutEtaKnown": "Der Vermieter wird am {date} ausgezahlt.",
+    "payoutEtaUnknown": "Der Vermieter wird einige Tage nach Ende Ihrer Miete ausgezahlt.",
+    "depositExplanation": "Die Kaution wird nur auf deiner Karte reserviert (bei langen Mieten belastet und vollständig erstattet) und automatisch freigegeben, wenn kein Schaden entsteht.",
+    "payButton": "Jetzt bezahlen",
+    "payButtonProcessing": "Wird verarbeitet…",
+    "stateRequiresAction": "Schließen Sie den von Ihrer Bank geforderten Verifizierungsschritt ab…",
+    "stateSucceededTitle": "Zahlung erfolgreich",
+    "stateSucceededDetail": "Ihre Buchung ist bezahlt. Sie erhalten eine Quittung per E-Mail.",
+    "stateFailedTitle": "Zahlung fehlgeschlagen",
+    "retry": "Erneut versuchen",
+    "alreadyPaid": "Diese Buchung wurde bereits bezahlt.",
+    "notConfirmedYet": "Diese Buchung wurde vom Vermieter noch nicht bestätigt — Sie können bezahlen, sobald sie bestätigt ist.",
+    "loadingBooking": "Buchung wird geladen…",
+    "bookingNotFound": "Buchung nicht gefunden.",
+    "errors": {
+      "BOOKING_NOT_CONFIRMED": "Diese Buchung wurde noch nicht bestätigt.",
+      "BOOKING_ALREADY_PAID": "Diese Buchung wurde bereits bezahlt.",
+      "PAYMENT_STILL_PROCESSING": "Ihre vorherige Zahlung wird noch bestätigt — bitte warten Sie einen Moment.",
+      "DEPOSIT_ALREADY_RESOLVED": "Die Kaution für diese Buchung wurde bereits abgewickelt.",
+      "stripe": {
+        "card_declined": "Ihre Karte wurde abgelehnt. Bitte versuchen Sie eine andere Karte.",
+        "expired_card": "Ihre Karte ist abgelaufen. Bitte versuchen Sie eine andere Karte.",
+        "insufficient_funds": "Ihre Karte hat nicht genügend Guthaben.",
+        "incorrect_cvc": "Der Sicherheitscode (CVC) ist falsch.",
+        "processing_error": "Bei der Verarbeitung Ihrer Karte ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+        "authentication_failure": "Ihre Karte konnte bei Ihrer Bank nicht verifiziert werden. Bitte versuchen Sie es erneut."
+      },
+      "BOOKING_PAYMENT_EXPIRED": "Die Zahlungsfrist für diese Buchung ist abgelaufen."
+    },
+    "totalRental": "Mietpreis gesamt",
+    "depositSeparately": "Die Kaution wird in einem eigenen Schritt hinterlegt und nach der Miete zurückgegeben.",
+    "stepPayment": "Miete bezahlen",
+    "stepDeposit": "Kaution hinterlegen",
+    "confirmingPayment": "Zahlung wird bestätigt…",
+    "confirmingDeposit": "Kaution wird bestätigt…",
+    "payBy": "Bitte bis {date} bezahlen — sonst verfällt die Buchung.",
+    "depositSecuredTitle": "Kaution hinterlegt",
+    "depositSecuredDetail": "Alles erledigt — der Vermieter kann dir das Auto übergeben.",
+    "depositAfterPayment": "Direkt nach der Bezahlung der Miete verfügbar.",
+    "depositOpensAt": "Die Kaution kann ab {date} hinterlegt werden — kurz vor Mietbeginn, damit die Reservierung die gesamte Miete abdeckt.",
+    "depositButton": "Kaution hinterlegen",
+    "depositHoldHint": "Der Betrag wird auf deiner Karte nur reserviert, nicht abgebucht.",
+    "depositChargeHint": "Bei längeren Mieten wird die Kaution belastet und nach der Miete vollständig erstattet.",
+    "securedByStripe": "Zahlungen werden sicher über Stripe abgewickelt",
+    "testCardHint": "Testmodus: Karte 4242 4242 4242 4242, beliebiges zukünftiges Datum, beliebige CVC"
+  },
+  "errors": {
+    "ACCOUNT_BLOCKED": "Dein Konto ist gesperrt.",
+    "INVALID_OR_EXPIRED_TOKEN": "Dieser Link ist ungültig oder abgelaufen.",
+    "ACCOUNT_HAS_OBLIGATIONS": "Bitte schließe zuerst laufende Buchungen und Zahlungen ab oder storniere sie.",
+    "CAR_UNAVAILABLE": "Dieses Auto ist derzeit nicht verfügbar.",
+    "CAR_HAS_ACTIVE_BOOKINGS": "Dieses Auto hat aktive Buchungen — storniere sie zuerst.",
+    "CONNECT_ONBOARDING_INCOMPLETE": "Der Vermieter hat die Auszahlung noch nicht eingerichtet — das Auto kann noch nicht gebucht werden.",
+    "BOOKING_DATES_UNAVAILABLE": "Diese Daten sind nicht mehr verfügbar.",
+    "BOOKING_INVALID_STATE": "Diese Aktion ist für die Buchung gerade nicht möglich.",
+    "BOOKING_NOT_CONFIRMED": "Die Buchung ist noch nicht bestätigt.",
+    "BOOKING_PAYMENT_EXPIRED": "Die Zahlungsfrist ist abgelaufen.",
+    "BOOKING_ALREADY_PAID": "Diese Buchung ist bereits bezahlt.",
+    "PAYMENT_STILL_PROCESSING": "Die Zahlung wird noch bestätigt.",
+    "BOOKING_NOT_STARTED": "Die Miete hat noch nicht begonnen.",
+    "BOOKING_NOT_PAID": "Die Miete ist noch nicht bezahlt.",
+    "BOOKING_DEPOSIT_MISSING": "Die Kaution ist noch nicht hinterlegt.",
+    "DEPOSIT_ALREADY_RESOLVED": "Die Kaution wurde bereits abgerechnet."
   }
 }

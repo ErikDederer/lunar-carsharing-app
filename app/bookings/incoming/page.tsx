@@ -7,14 +7,30 @@ import { BookingIncomingItem } from '@/components/bookings/BookingIncomingItem';
 import { BookingsTabs } from '@/components/bookings/BookingsTabs';
 import { useIncomingBookingsPage, type IncomingFilterTab } from '@/hooks/useIncomingBookingsPage';
 import { useMarkStatsSeen } from '@/hooks/useMarkStatsSeen';
+import { Toast } from '@/components/common/Toast';
+import { errorMessage } from '@/lib/errorMessage';
 
 const TAB_KEYS: IncomingFilterTab[] = ['all', 'pending', 'confirmed'];
 
 export default function IncomingBookingsPage() {
   const t = useTranslations('incomingBookings');
   const tCommon = useTranslations('common');
-  const { bookings, isLoading, isError, activeTab, setActiveTab, confirm, decline, complete, isMutating, pendingCount } =
-    useIncomingBookingsPage();
+  const tErrors = useTranslations('errors');
+  const {
+    bookings,
+    isLoading,
+    isError,
+    activeTab,
+    setActiveTab,
+    confirm,
+    decline,
+    pickup,
+    complete,
+    isMutating,
+    pendingCount,
+    actionError,
+    clearActionError,
+  } = useIncomingBookingsPage();
   useMarkStatsSeen('incoming');
 
   return (
@@ -55,13 +71,9 @@ export default function IncomingBookingsPage() {
               <BookingIncomingItem
                 key={booking.id}
                 booking={booking}
-                statusLabel={t(`status.${booking.status}`)}
-                totalLabel={t('total', { total: booking.totalPrice })}
-                confirmLabel={t('confirm')}
-                declineLabel={t('decline')}
-                completeLabel={t('complete')}
                 onConfirm={confirm}
                 onDecline={decline}
+                onPickup={pickup}
                 onComplete={complete}
                 disabled={isMutating}
               />
@@ -69,6 +81,13 @@ export default function IncomingBookingsPage() {
           </div>
         )}
       </div>
+      {actionError !== null && (
+        <Toast
+          type="error"
+          message={errorMessage(actionError, tErrors, tCommon('error'))}
+          onClose={clearActionError}
+        />
+      )}
     </div>
   );
 }

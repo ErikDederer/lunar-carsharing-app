@@ -1,11 +1,21 @@
 import type { Car } from './car';
+import type { PaymentRecord, DepositRecord } from './payment';
 
-export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
+// IN_PROGRESS = car handed over, EXPIRED = not answered / not paid in time
+export type BookingStatus =
+  | 'PENDING'
+  | 'CONFIRMED'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'CANCELLED'
+  | 'EXPIRED';
+
+export type BookingActor = 'RENTER' | 'OWNER' | 'ADMIN' | 'SYSTEM';
 
 export interface BookedDate {
   startAt: string;
   endAt: string;
-  bookingStatus: 'PENDING' | 'CONFIRMED';
+  bookingStatus: 'PENDING' | 'CONFIRMED' | 'IN_PROGRESS';
 }
 
 export interface AvailabilitySlot {
@@ -62,11 +72,33 @@ export interface BookingRaw {
   endAt: string;
   totalPrice: number | string;
   depositAmount: number | string;
+  // Snapshot of the agreed terms, integer cents (source of truth for money)
+  currency?: string;
+  totalPriceCents?: number;
+  depositAmountCents?: number;
   bookingStatus: BookingStatus;
+  paymentDueAt?: string | null;
+  pickedUpAt?: string | null;
+  returnedAt?: string | null;
+  cancelledBy?: BookingActor | null;
   createdAt: string;
   updatedAt: string;
   car?: BookingRawCar | Car;
   renter?: BookingRenter;
+  // Full records via GET /bookings/:id; status-only summaries in the lists.
+  payment?: PaymentRecord | PaymentSummary | null;
+  deposit?: DepositRecord | DepositSummary | null;
+}
+
+export interface PaymentSummary {
+  status: PaymentRecord['status'];
+  amountTotal: number;
+  currency: string;
+}
+
+export interface DepositSummary {
+  status: DepositRecord['status'];
+  amount: number;
 }
 
 export interface Booking {
@@ -75,12 +107,18 @@ export interface Booking {
   renterId: string;
   startAt: string;
   endAt: string;
-  totalPrice: number;
-  depositAmount: number;
+  // Integer cents
+  totalPriceCents: number;
+  depositAmountCents: number;
+  currency: string;
   status: BookingStatus;
+  paymentDueAt: string | null;
+  cancelledBy: BookingActor | null;
   createdAt: string;
   car?: BookingRawCar | Car;
   renter?: BookingRenter;
+  payment?: PaymentRecord | PaymentSummary | null;
+  deposit?: DepositRecord | DepositSummary | null;
 }
 
 export interface BookingStatsCounts {

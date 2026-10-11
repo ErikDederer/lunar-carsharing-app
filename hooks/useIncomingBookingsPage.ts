@@ -22,27 +22,35 @@ export function useIncomingBookingsPage() {
     refetchOnMount: 'always',
   });
 
+  // Last action error, shown as a toast by the page (null = none)
+  const [actionError, setActionError] = useState<unknown>(null);
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ['bookings', 'incoming'] });
+  const handlers = { onSuccess: invalidate, onError: setActionError };
 
   const { mutate: confirm, isPending: isConfirming } = useMutation({
     mutationFn: (id: string) => bookingService.confirm(id),
-    onSuccess: invalidate,
+    ...handlers,
   });
 
   const { mutate: decline, isPending: isDeclining } = useMutation({
     mutationFn: (id: string) => bookingService.cancel(id),
-    onSuccess: invalidate,
+    ...handlers,
+  });
+
+  const { mutate: pickup, isPending: isPickingUp } = useMutation({
+    mutationFn: (id: string) => bookingService.pickup(id),
+    ...handlers,
   });
 
   const { mutate: complete, isPending: isCompleting } = useMutation({
     mutationFn: (id: string) => bookingService.complete(id),
-    onSuccess: invalidate,
+    ...handlers,
   });
 
   const bookings = allBookings.filter((b) => {
     if (activeTab === 'all') return true;
     if (activeTab === 'pending') return b.status === 'PENDING';
-    return b.status === 'CONFIRMED';
+    return b.status === 'CONFIRMED' || b.status === 'IN_PROGRESS';
   });
 
   const pendingCount = allBookings.filter((b) => b.status === 'PENDING').length;
@@ -55,8 +63,11 @@ export function useIncomingBookingsPage() {
     setActiveTab,
     confirm,
     decline,
+    pickup,
     complete,
-    isMutating: isConfirming || isDeclining || isCompleting,
+    isMutating: isConfirming || isDeclining || isPickingUp || isCompleting,
+    actionError,
+    clearActionError: () => setActionError(null),
     pendingCount,
   };
 }

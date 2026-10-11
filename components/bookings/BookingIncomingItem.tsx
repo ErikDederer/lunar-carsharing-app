@@ -1,48 +1,44 @@
 'use client';
 
-import { Car, Check, X, Flag, Mail, Phone } from 'lucide-react';
+import { Car, Check, X, Flag, Mail, Phone, KeyRound, Clock } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import Button from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
 import { formatBookingDates, bookingCarName, bookingCarPhoto } from '@/lib/formatBookingDates';
-import type { Booking, BookingStatus } from '@/types/booking';
+import { formatMoney } from '@/lib/formatMoney';
+import { BOOKING_BADGE, hasStarted, isDepositSecured, isPaid } from '@/lib/bookingStatus';
+import type { Booking } from '@/types/booking';
 
 interface BookingIncomingItemProps {
   booking: Booking;
-  statusLabel: string;
-  totalLabel: string;
-  confirmLabel: string;
-  declineLabel: string;
-  completeLabel: string;
   onConfirm: (id: string) => void;
   onDecline: (id: string) => void;
+  onPickup: (id: string) => void;
   onComplete: (id: string) => void;
   disabled: boolean;
 }
 
-const badgeVariant: Record<BookingStatus, 'pending' | 'confirmed' | 'completed' | 'cancelled'> = {
-  PENDING: 'pending',
-  CONFIRMED: 'confirmed',
-  COMPLETED: 'completed',
-  CANCELLED: 'cancelled',
-};
-
+// Owner's view of one booking. The available action follows the rental
+// lifecycle: confirm/decline → (renter pays) → hand over → car returned.
 export function BookingIncomingItem({
   booking,
-  statusLabel,
-  totalLabel,
-  confirmLabel,
-  declineLabel,
-  completeLabel,
   onConfirm,
   onDecline,
+  onPickup,
   onComplete,
   disabled,
 }: BookingIncomingItemProps) {
+  const t = useTranslations('incomingBookings');
+  const locale = useLocale();
   const photo = bookingCarPhoto(booking.car);
+  const paid = isPaid(booking);
+  const depositOk = isDepositSecured(booking);
+  const started = hasStarted(booking);
+
   return (
     <div className="bg-bg-card rounded-2xl shadow-sm border border-border-default p-4 flex flex-col gap-4">
       <div className="flex items-start gap-3">
-        <div className="w-12 h-12 rounded-xl border border-border-default bg-bg-disabled flex items-center justify-center shrink-0 overflow-hidden">
+        <div className="w-14 h-14 rounded-xl border border-border-default bg-bg-disabled flex items-center justify-center shrink-0 overflow-hidden">
           {photo ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={photo} alt={bookingCarName(booking.car)} className="w-full h-full object-cover" />
@@ -69,29 +65,74 @@ export function BookingIncomingItem({
           )}
         </div>
 
-        <Badge variant={badgeVariant[booking.status]} size="sm" label={statusLabel} className="min-w-0 shrink-0" />
+        <Badge
+          variant={BOOKING_BADGE[booking.status]}
+          size="sm"
+          label={t(`status.${booking.status}`)}
+          className="min-w-0 shrink-0"
+        />
       </div>
 
-      <div className="flex items-center justify-between">
-        <p className="text-base font-bold text-text-base">{totalLabel}</p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-col">
+          <p className="text-base font-bold text-text-base">
+            {formatMoney(booking.totalPriceCents, booking.currency, locale)}
+          </p>
+          {booking.status === 'CONFIRMED' && (
+            <p className="text-xs text-text-muted flex items-center gap-1">
+              {paid ? (
+                <>
+                  <Check size={12} className="text-brand" />
+                  {depositOk ? t('paid') : t('paidDepositPending')}
+                </>
+              ) : (
+                <>
+                  <Clock size={12} />
+                  {t('awaitingPayment')}
+                </>
+              )}
+            </p>
+          )}
+        </div>
 
         {booking.status === 'PENDING' && (
           <div className="flex gap-2">
             <Button variant="danger-outline" size="sm" leftIcon={<X size={14} />} onClick={() => onDecline(booking.id)} disabled={disabled}>
-              {declineLabel}
+              {t('decline')}
             </Button>
             <Button size="sm" leftIcon={<Check size={14} />} onClick={() => onConfirm(booking.id)} disabled={disabled}>
-              {confirmLabel}
+              {t('confirm')}
             </Button>
           </div>
         )}
 
-        {booking.status === 'CONFIRMED' && (
+        {booking.status === 'CONFIRMED' && paid && depositOk && (
+          <Button
+            size="sm"
+            leftIcon={<KeyRound size={14} />}
+            onClick={() => onPickup(booking.id)}
+            disabled={disabled || !started}
+          >
+            {t('pickup')}
+          </Button>
+        )}
+
+        {booking.status === 'CONFIRMED' && !paid && (
+          <Button variant="danger-outline" size="sm" leftIcon={<X size={14} />} onClick={() => onDecline(booking.id)} disabled={disabled}>
+            {t('cancelBooking')}
+          </Button>
+        )}
+
+        {booking.status === 'IN_PROGRESS' && (
           <Button size="sm" leftIcon={<Flag size={14} />} onClick={() => onComplete(booking.id)} disabled={disabled}>
-            {completeLabel}
+            {t('complete')}
           </Button>
         )}
       </div>
+
+      {booking.status === 'CONFIRMED' && paid && depositOk && !started && (
+        <p className="text-xs text-text-muted -mt-2">{t('pickupFromStart')}</p>
+      )}
     </div>
   );
 }

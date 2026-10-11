@@ -1,12 +1,10 @@
 import { apiFetch } from '@/lib/apiFetch';
+import { parseApiError } from '@/lib/apiError';
 import type { Booking, BookingRaw, BookingStats, CreateBookingDto } from '@/types/booking';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await apiFetch(path, options);
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    throw new Error(data?.message ?? `Request failed: ${res.status}`);
-  }
+  if (!res.ok) throw await parseApiError(res);
   return res.json() as Promise<T>;
 }
 
@@ -17,12 +15,18 @@ function normalize(raw: BookingRaw): Booking {
     renterId: raw.renterId,
     startAt: raw.startAt,
     endAt: raw.endAt,
-    totalPrice: Number(raw.totalPrice),
-    depositAmount: Number(raw.depositAmount),
+    // Older rows may predate the cents snapshot — fall back to the Decimal.
+    totalPriceCents: raw.totalPriceCents ?? Math.round(Number(raw.totalPrice) * 100),
+    depositAmountCents: raw.depositAmountCents ?? Math.round(Number(raw.depositAmount) * 100),
+    currency: raw.currency ?? 'eur',
     status: raw.bookingStatus,
+    paymentDueAt: raw.paymentDueAt ?? null,
+    cancelledBy: raw.cancelledBy ?? null,
     createdAt: raw.createdAt,
     car: raw.car,
     renter: raw.renter,
+    payment: raw.payment,
+    deposit: raw.deposit,
   };
 }
 
@@ -33,6 +37,9 @@ export const bookingService = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dto),
     }).then(normalize),
+
+  getById: (id: string): Promise<Booking> =>
+    request<BookingRaw>(`/bookings/${id}`).then(normalize),
 
   getMy: (): Promise<Booking[]> =>
     request<BookingRaw[]>('/bookings/my').then((list) => list.map(normalize)),
@@ -48,6 +55,10 @@ export const bookingService = {
 
   cancel: (id: string): Promise<Booking> =>
     request<BookingRaw>(`/bookings/${id}/cancel`, { method: 'PATCH' }).then(normalize),
+
+  // Owner hands the car over: CONFIRMED (paid, deposit secured) -> IN_PROGRESS
+  pickup: (id: string): Promise<Booking> =>
+    request<BookingRaw>(`/bookings/${id}/pickup`, { method: 'PATCH' }).then(normalize),
 
   complete: (id: string): Promise<Booking> =>
     request<BookingRaw>(`/bookings/${id}/complete`, { method: 'PATCH' }).then(normalize),

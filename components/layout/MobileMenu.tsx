@@ -11,10 +11,9 @@ import { StatusBadges } from './StatusBadges';
 
 interface MobileMenuProps {
   isAuthenticated: boolean;
-  unreadCount: number;
 }
 
-export function MobileMenu({ isAuthenticated, unreadCount }: MobileMenuProps) {
+export function MobileMenu({ isAuthenticated }: MobileMenuProps) {
   const t = useTranslations('nav');
   const tAuth = useTranslations('auth');
   const [open, setOpen] = useState(false);
@@ -68,9 +67,6 @@ export function MobileMenu({ isAuthenticated, unreadCount }: MobileMenuProps) {
                   {isGroupEnabled('incoming') && (
                     <StatusBadges newCounts={newCounts.incoming} toggles={toggles.incoming} />
                   )}
-                </Link>
-                <Link href="/notifications" onClick={() => setOpen(false)} className="rounded px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                  {t('notifications')}{unreadCount > 0 && ` (${unreadCount})`}
                 </Link>
                 <Link href="/profile" onClick={() => setOpen(false)} className="rounded px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
                   {t('profile')}
