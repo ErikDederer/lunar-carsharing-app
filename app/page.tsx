@@ -3,14 +3,12 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { Car, Shield, CreditCard, Clock, MapPin, ChevronRight, CheckCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
-import StarRating from '@/components/atoms/StarRating';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
 import { carService } from '@/services/car.service';
-import { ShimmerButton } from '@/components/ui/shimmer-button';
+import { ShimmerLink } from '@/components/ui/shimmer-link';
 import { AnimatedShinyText } from '@/components/ui/animated-shiny-text';
 import { Reveal } from '@/components/motion/Reveal';
 import { CountUp } from '@/components/motion/CountUp';
@@ -19,7 +17,6 @@ import { gsap, MOTION_OK, useGSAP } from '@/lib/gsap';
 
 export default function HomePage() {
   const t = useTranslations('landing');
-  const router = useRouter();
   const heroRef = useRef<HTMLElement>(null);
   const heroCardRef = useRef<HTMLDivElement>(null);
 
@@ -65,13 +62,13 @@ export default function HomePage() {
             underline,
             { strokeDasharray: length, strokeDashoffset: length },
             { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut' },
-            0.45,
+            0.45
           );
         }
       });
       return () => mm.revert();
     },
-    { scope: heroRef },
+    { scope: heroRef }
   );
 
   // The showcase card arrives once the first car is loaded, then floats.
@@ -94,29 +91,34 @@ export default function HomePage() {
           .from(
             card.querySelectorAll('[data-hero="chip"]'),
             { scale: 0.6, autoAlpha: 0, duration: 0.5, ease: 'back.out(2)', stagger: 0.12 },
-            '-=0.4',
+            '-=0.4'
           );
+        // Gentle float on a dedicated GPU layer (force3D + will-change), so
+        // the text inside isn't re-rasterised every frame — that's what made
+        // it look jittery.
         gsap.to(card.querySelector('[data-hero="card"]'), {
-          y: -10,
-          duration: 2.8,
+          y: -6,
+          duration: 3.6,
           ease: 'sine.inOut',
           repeat: -1,
           yoyo: true,
           delay: 1,
+          force3D: true,
         });
         gsap.to(card.querySelectorAll('[data-hero="chip"]'), {
-          y: 6,
-          duration: 2.2,
+          y: 4,
+          duration: 3,
           ease: 'sine.inOut',
           repeat: -1,
           yoyo: true,
-          stagger: 0.4,
+          stagger: 0.6,
           delay: 1.2,
+          force3D: true,
         });
       });
       return () => mm.revert();
     },
-    { scope: heroCardRef, dependencies: [heroCarId], revertOnUpdate: true },
+    { scope: heroCardRef, dependencies: [heroCarId], revertOnUpdate: true }
   );
 
   const ownerStats = [
@@ -168,28 +170,26 @@ export default function HomePage() {
             >
               {t('nav.login')}
             </Link>
-            <Link
+            <ShimmerLink
               href="/login?tab=register"
-              className="hidden md:inline-flex bg-landing-cta-bg text-text-base text-sm font-semibold px-4 py-2 rounded-lg hover:bg-landing-cta-hover transition-colors"
+              radius="8px"
+              className="hidden md:inline-flex text-sm px-4 py-2"
             >
               {t('nav.start')}
-            </Link>
+            </ShimmerLink>
           </div>
         </div>
 
         <div className="md:hidden max-w-6xl mx-auto px-6 pb-3 flex flex-col gap-2">
           <Link
             href="/login"
-            className="w-full text-center text-sm font-semibold text-text-secondary border border-border-default rounded-lg py-2.5 hover:bg-bg-page transition-colors"
+            className="w-full text-center text-sm font-semibold text-text-secondary border border-border-default rounded-lg py-2.5 bg-gradient-to-b from-white to-gray-50 shadow-[inset_0_1px_0_#fff,0_1px_2px_rgba(16,24,40,0.06),0_6px_14px_-8px_rgba(16,24,40,0.2)] hover:-translate-y-0.5 transition-all duration-200"
           >
             {t('nav.login')}
           </Link>
-          <Link
-            href="/login?tab=register"
-            className="w-full text-center bg-landing-cta-bg text-text-base text-sm font-semibold rounded-lg py-2.5 hover:bg-landing-cta-hover transition-colors"
-          >
+          <ShimmerLink href="/login?tab=register" radius="8px" className="w-full text-sm py-2.5">
             {t('nav.start')}
-          </Link>
+          </ShimmerLink>
         </div>
       </nav>
 
@@ -202,13 +202,18 @@ export default function HomePage() {
                 className="inline-flex items-center gap-2 bg-brand-subtle text-landing-cta-text text-xs font-semibold px-3 py-1.5 rounded-full mb-6 border border-brand/15"
               >
                 <span className="w-2 h-2 rounded-full bg-landing-cta-bg animate-pulse" />
-                <AnimatedShinyText className="mx-0 max-w-none text-landing-cta-text via-orange-300" shimmerWidth={120}>
+                <AnimatedShinyText
+                  className="mx-0 max-w-none text-landing-cta-text via-orange-300"
+                  shimmerWidth={120}
+                >
                   {t('hero.badge')}
                 </AnimatedShinyText>
               </div>
 
               <h1 className="text-5xl lg:text-6xl font-bold text-text-base leading-tight tracking-tight mb-6">
-                <span data-hero="item" className="inline-block">{t('hero.titleStart')}</span>{' '}
+                <span data-hero="item" className="inline-block">
+                  {t('hero.titleStart')}
+                </span>{' '}
                 <span data-hero="item" className="inline-block text-landing-cta-text relative">
                   {t('hero.titleAccent')}
                   <svg className="absolute -bottom-1 left-0 w-full" height="6" viewBox="0 0 200 6">
@@ -223,100 +228,98 @@ export default function HomePage() {
                     />
                   </svg>
                 </span>{' '}
-                <span data-hero="item" className="inline-block">{t('hero.titleEnd')}</span>
+                <span data-hero="item" className="inline-block">
+                  {t('hero.titleEnd')}
+                </span>
               </h1>
 
               <p data-hero="item" className="text-lg text-text-muted leading-relaxed mb-8 max-w-lg">
                 {t('hero.subtitle')}
               </p>
 
-              <div data-hero="item" className="flex flex-col sm:flex-row gap-3 mb-10">
-                <ShimmerButton
-                  onClick={() => router.push('/search')}
-                  background="var(--brand)"
-                  shimmerColor="#fff7ed"
-                  shimmerDuration="2.6s"
-                  borderRadius="12px"
-                  className="gap-2 px-6 py-3.5 font-semibold text-white shadow-lg shadow-brand/25 hover:-translate-y-0.5 transition-transform"
-                >
+              <div data-hero="item" className="flex flex-col sm:flex-row gap-3">
+                <ShimmerLink href="/search" className="px-6 py-3.5">
                   {t('hero.findCar')}
-                  <ChevronRight size={18} className="transition-transform group-hover:translate-x-0.5" />
-                </ShimmerButton>
+                  <ChevronRight
+                    size={18}
+                    className="transition-transform group-hover/shimmer:translate-x-0.5"
+                  />
+                </ShimmerLink>
                 <Link
                   href="/login?tab=register"
-                  className="flex items-center justify-center gap-2 border border-border-default text-text-secondary font-semibold px-6 py-3.5 rounded-xl hover:bg-bg-page transition-colors"
+                  className="flex items-center justify-center gap-2 border border-border-default text-text-secondary font-semibold px-6 py-3.5 rounded-xl hover:to-gray-100 bg-gradient-to-b from-white to-gray-50 shadow-[inset_0_1px_0_#fff,0_1px_2px_rgba(16,24,40,0.06),0_6px_14px_-8px_rgba(16,24,40,0.2)] hover:-translate-y-0.5 transition-all duration-200"
                 >
                   {t('hero.rentOut')}
                 </Link>
-              </div>
-
-              <div data-hero="item" className="flex items-center gap-4">
-                <div className="flex -space-x-2">
-                  {['ОВ', 'АП', 'МР', 'ДС'].map((init) => (
-                    <div
-                      key={init}
-                      className="w-8 h-8 rounded-full bg-brand-subtle border-2 border-bg-card flex items-center justify-center text-xs font-bold text-landing-cta-text"
-                    >
-                      {init}
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <div className="mb-0.5">
-                    <StarRating value={5} size="sm" readonly />
-                  </div>
-                  <p className="text-xs text-text-muted">
-                    <strong className="text-text-base">18,000+</strong> {t('hero.happyRenters')}
-                  </p>
-                </div>
               </div>
             </div>
 
             <div ref={heroCardRef} className="relative">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-subtle via-brand-subtle to-orange-100" />
-              <div aria-hidden="true" className="absolute -top-10 -right-10 h-48 w-48 rounded-full bg-brand/20 blur-3xl" />
+              <div
+                aria-hidden="true"
+                className="absolute -top-10 -right-10 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
+              />
               <div className="relative p-8">
                 {cars[0] && (
-                <div data-hero="card" className="bg-bg-card rounded-2xl shadow-2xl shadow-brand/10 border border-border-default p-5 mb-4">
-                  <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-bg-page">
-                    {cars[0].mainPhoto && (
-                      <Image
-                        src={cars[0].mainPhoto}
-                        alt={`${cars[0].brand} ${cars[0].model}`}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 33vw"
-                        className="object-cover"
-                      />
-                    )}
-                  </div>
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <p className="font-bold text-text-base">{cars[0].brand} {cars[0].model} {cars[0].year}</p>
-                      <p className="text-sm text-text-muted">{cars[0].address}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xl font-bold text-landing-cta-text">€{cars[0].pricePerDay}</p>
-                      <p className="text-xs text-text-muted">{t('hero.perDay')}</p>
-                    </div>
-                  </div>
-                  <Link
-                    href={`/cars/${cars[0].id}`}
-                    className="mt-4 w-full flex items-center justify-center bg-landing-cta-bg text-text-base font-semibold py-3 rounded-xl hover:bg-landing-cta-hover transition-colors"
+                  <div
+                    data-hero="card"
+                    className="bg-bg-card rounded-2xl shadow-2xl border border-border-default p-5 mb-4 will-change-transform [backface-visibility:hidden]"
                   >
-                    {t('hero.book')}
-                  </Link>
-                </div>
+                    <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-4 bg-bg-page">
+                      {cars[0].mainPhoto && (
+                        <Image
+                          src={cars[0].mainPhoto}
+                          alt={`${cars[0].brand} ${cars[0].model}`}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 33vw"
+                          className="object-cover"
+                        />
+                      )}
+                    </div>
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <p className="font-bold text-text-base">
+                          {cars[0].brand} {cars[0].model} {cars[0].year}
+                        </p>
+                        <p className="text-sm text-text-muted">{cars[0].address}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xl font-bold text-landing-cta-text">
+                          €{cars[0].pricePerDay}
+                        </p>
+                        <p className="text-xs text-text-muted">{t('hero.perDay')}</p>
+                      </div>
+                    </div>
+                    <ShimmerLink href={`/cars/${cars[0].id}`} className="mt-4 w-full py-3">
+                      {t('hero.book')}
+                    </ShimmerLink>
+                  </div>
                 )}
 
-                <div data-hero="chip" className="absolute -top-4 -right-4 bg-bg-card rounded-xl shadow-lg border border-border-default px-4 py-3 flex items-center gap-2">
-                  <CheckCircle size={16} className="text-landing-cta-bg" />
-                  <span className="text-xs font-semibold text-text-base">{t('hero.verified')}</span>
-                </div>
+                {cars[0] && (
+                  <>
+                    <div
+                      data-hero="chip"
+                      className="will-change-transform [backface-visibility:hidden] absolute -top-4 -right-4 bg-bg-card rounded-xl shadow-lg border border-border-default px-4 py-3 flex items-center gap-2"
+                    >
+                      <CheckCircle size={16} className="text-landing-cta-bg" />
+                      <span className="text-xs font-semibold text-text-base">
+                        {t('hero.verified')}
+                      </span>
+                    </div>
 
-                <div data-hero="chip" className="absolute -bottom-4 -left-4 bg-bg-card rounded-xl shadow-lg border border-border-default px-4 py-3">
-                  <p className="text-xs text-text-muted">{t('hero.responseTime')}</p>
-                  <p className="text-xs font-semibold text-text-base">{t('hero.responseValue')}</p>
-                </div>
+                    <div
+                      data-hero="chip"
+                      className="will-change-transform [backface-visibility:hidden] absolute -bottom-4 -left-4 bg-bg-card rounded-xl shadow-lg border border-border-default px-4 py-3"
+                    >
+                      <p className="text-xs text-text-muted">{t('hero.responseTime')}</p>
+                      <p className="text-xs font-semibold text-text-base">
+                        {t('hero.responseValue')}
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -399,10 +402,14 @@ export default function HomePage() {
                 </div>
                 <div className="p-5">
                   <div className="flex items-start justify-between mb-1">
-                    <p className="font-bold text-text-base">{car.brand} {car.model}</p>
+                    <p className="font-bold text-text-base">
+                      {car.brand} {car.model}
+                    </p>
                     <p className="text-lg font-bold text-landing-cta-text">
                       €{car.pricePerDay}
-                      <span className="text-xs font-normal text-text-muted">{t('hero.perDay')}</span>
+                      <span className="text-xs font-normal text-text-muted">
+                        {t('hero.perDay')}
+                      </span>
                     </p>
                   </div>
                   <p className="text-sm text-text-muted mb-3">
@@ -469,13 +476,10 @@ export default function HomePage() {
                   </div>
                 ))}
               </Reveal>
-              <Link
-                href="/login?tab=register"
-                className="inline-flex items-center gap-2 bg-landing-cta-bg text-text-base font-semibold px-6 py-3.5 rounded-xl hover:bg-landing-cta-hover transition-colors"
-              >
+              <ShimmerLink href="/login?tab=register" className="px-6 py-3.5">
                 {t('owners.addCar')}
                 <ChevronRight size={18} />
-              </Link>
+              </ShimmerLink>
             </div>
 
             <Reveal className="grid grid-cols-2 gap-4" stagger={0.1}>
@@ -501,16 +505,13 @@ export default function HomePage() {
           <h2 className="text-4xl font-bold text-text-base mb-4">{t('cta.title')}</h2>
           <p className="text-text-base mb-8 text-lg">{t('cta.subtitle')}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/search"
-              className="flex items-center justify-center gap-2 bg-bg-card text-landing-cta-text font-bold px-8 py-4 rounded-xl hover:bg-bg-page transition-colors"
-            >
+            <ShimmerLink href="/search" tone="light" className="font-bold px-8 py-4">
               {t('cta.findCar')}
               <ChevronRight size={18} />
-            </Link>
+            </ShimmerLink>
             <Link
               href="/login?tab=register"
-              className="flex items-center justify-center gap-2 bg-landing-cta-btn-bg text-text-base font-bold px-8 py-4 rounded-xl hover:bg-landing-cta-btn-hover transition-colors border border-landing-cta-btn-border"
+              className="flex items-center justify-center gap-2 bg-landing-cta-btn-bg text-text-base font-bold px-8 py-4 rounded-xl hover:bg-landing-cta-btn-hover border border-landing-cta-btn-border shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_6px_16px_-8px_rgba(17,24,39,0.3)] hover:-translate-y-0.5 transition-all duration-200"
             >
               {t('cta.register')}
             </Link>
