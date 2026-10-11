@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Car, Shield, Star, Clock, MapPin, ChevronRight, CheckCircle } from 'lucide-react';
+import { Car, Shield, CreditCard, Clock, MapPin, ChevronRight, CheckCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import StarRating from '@/components/atoms/StarRating';
@@ -29,7 +29,7 @@ export default function HomePage() {
     { icon: <Shield size={20} />, title: t('features.f1Title'), desc: t('features.f1Desc') },
     { icon: <Clock size={20} />, title: t('features.f2Title'), desc: t('features.f2Desc') },
     { icon: <MapPin size={20} />, title: t('features.f3Title'), desc: t('features.f3Desc') },
-    { icon: <Star size={20} />, title: t('features.f4Title'), desc: t('features.f4Desc') },
+    { icon: <CreditCard size={20} />, title: t('features.f4Title'), desc: t('features.f4Desc') },
   ];
 
   const { data: carsData } = useQuery({
