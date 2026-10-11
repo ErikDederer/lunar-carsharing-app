@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import Button from '@/components/atoms/Button';
 import { DateRangePicker } from '@/components/atoms/DateRangePicker';
-import { Banknote, ArrowLeft } from 'lucide-react';
+import { CreditCard, ArrowLeft } from 'lucide-react';
+import { errorMessage } from '@/lib/errorMessage';
 import { useBookingNewPage } from '@/hooks/useBookingNewPage';
 import { useTranslations } from 'next-intl';
 
@@ -19,6 +20,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function BookingNewPage() {
   const t = useTranslations('bookings');
   const tCommon = useTranslations('common');
+  const tErrors = useTranslations('errors');
   const {
     carId, car, dateRange, setDateRange, busyRanges, availableRanges, blockedRanges,
     days, pricePerDay, deposit, rentalCost, total,
@@ -74,7 +76,7 @@ export default function BookingNewPage() {
         <Section title={t('payment')}>
           <div className="flex items-center gap-3 border border-border-default rounded-xl p-4">
             <div className="w-9 h-9 rounded-lg bg-brand-subtle flex items-center justify-center shrink-0">
-              <Banknote size={18} className="text-brand" />
+              <CreditCard size={18} className="text-brand" />
             </div>
             <div>
               <p className="text-sm font-medium text-text-secondary">{t('cashPayment')}</p>
@@ -86,7 +88,7 @@ export default function BookingNewPage() {
 
       {error && (
         <p className="text-sm text-text-error">
-          {error instanceof Error ? error.message : tCommon('error')}
+          {errorMessage(error, tErrors, tCommon('error'))}
         </p>
       )}
 
