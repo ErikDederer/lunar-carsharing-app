@@ -1,9 +1,7 @@
-import { PrivateRoute } from '@/components/layout/PrivateRoute';
+import { redirect } from 'next/navigation';
 
-export default function BookingConfirmationPage() {
-  return (
-    <PrivateRoute>
-      <div>BookingConfirmationPage</div>
-    </PrivateRoute>
-  );
+// Kept for old links: the booking's own page shows its status and payment.
+export default async function BookingConfirmationPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  redirect(`/bookings/${id}`);
 }

@@ -1,9 +1,6 @@
-import { PrivateRoute } from '@/components/layout/PrivateRoute';
+import { redirect } from 'next/navigation';
 
+// Notifications are sent by e-mail; an in-app inbox is not built yet.
 export default function NotificationsPage() {
-  return (
-    <PrivateRoute>
-      <div>NotificationsPage</div>
-    </PrivateRoute>
-  );
+  redirect('/bookings');
 }

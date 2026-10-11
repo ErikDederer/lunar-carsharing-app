@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Car } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
-import { useNotificationStore } from '@/store/notification.store';
 import { useBookingStats } from '@/hooks/useBookingStats';
 import { UserDropdown } from './UserDropdown';
 import { StatusBadges } from './StatusBadges';
@@ -35,7 +34,6 @@ export function Header() {
   const t = useTranslations('nav');
   const pathname = usePathname();
   const { isAuthenticated } = useAuthStore();
-  const { unreadCount } = useNotificationStore();
   const { toggles, newCounts, isGroupEnabled } = useBookingStats();
   const authenticated = process.env.NEXT_PUBLIC_DEV_BYPASS_AUTH === 'true' || isAuthenticated;
 
@@ -78,7 +76,7 @@ export function Header() {
           <LanguageSwitcher />
         </div>
 
-        <MobileMenu isAuthenticated={authenticated} unreadCount={unreadCount} />
+        <MobileMenu isAuthenticated={authenticated} />
       </div>
     </header>
   );

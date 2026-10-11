@@ -3,7 +3,6 @@ import type { NextRequest } from 'next/server';
 
 const PUBLIC_ROUTES = [
   '/login',
-  '/ua-kit',
   '/privacy',
   '/terms',
   '/impressum',

@@ -68,9 +68,6 @@ export async function Footer() {
             <Link href="/insurance" className="text-sm hover:text-landing-dark-text transition-colors">
               {t('insurance')}
             </Link>
-            <Link href="/mobile" className="text-sm hover:text-landing-dark-text transition-colors">
-              {t('mobileApps')}
-            </Link>
             <Link href="/help" className="text-sm hover:text-landing-dark-text transition-colors">
               {t('helpCenter')}
             </Link>
