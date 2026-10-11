@@ -4,11 +4,9 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { bookingService } from '@/services/booking.service';
 import { useAuthStore } from '@/store/auth.store';
-import type { BookingStatus } from '@/types/booking';
+import { ACTIVE_BOOKING_STATUSES, ENDED_BOOKING_STATUSES } from '@/lib/bookingStatus';
 
 export type MyBookingsTab = 'all' | 'active' | 'completed' | 'cancelled';
-
-const ACTIVE_STATUSES: BookingStatus[] = ['PENDING', 'CONFIRMED'];
 
 export function useMyBookingsPage() {
   const hydrated = useAuthStore((s) => s._hydrated);
@@ -25,18 +23,21 @@ export function useMyBookingsPage() {
     refetchOnMount: 'always',
   });
 
+  const [actionError, setActionError] = useState<unknown>(null);
+
   const { mutate: cancel, isPending: isCancelling } = useMutation({
     mutationFn: (id: string) => bookingService.cancel(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bookings', 'my'] });
     },
+    onError: setActionError,
   });
 
   const bookings = allBookings.filter((b) => {
     if (activeTab === 'all') return true;
-    if (activeTab === 'active') return ACTIVE_STATUSES.includes(b.status);
+    if (activeTab === 'active') return ACTIVE_BOOKING_STATUSES.includes(b.status);
     if (activeTab === 'completed') return b.status === 'COMPLETED';
-    return b.status === 'CANCELLED';
+    return ENDED_BOOKING_STATUSES.includes(b.status);
   });
 
   return {
@@ -47,5 +48,7 @@ export function useMyBookingsPage() {
     setActiveTab,
     cancel,
     isCancelling,
+    actionError,
+    clearActionError: () => setActionError(null),
   };
 }

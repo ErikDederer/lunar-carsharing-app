@@ -9,13 +9,26 @@ import { MyBookingItem } from '@/components/bookings/MyBookingItem';
 import { BookingsTabs } from '@/components/bookings/BookingsTabs';
 import { useMyBookingsPage, type MyBookingsTab } from '@/hooks/useMyBookingsPage';
 import { useMarkStatsSeen } from '@/hooks/useMarkStatsSeen';
+import { Toast } from '@/components/common/Toast';
+import { errorMessage } from '@/lib/errorMessage';
 
 const TAB_KEYS: MyBookingsTab[] = ['all', 'active', 'completed', 'cancelled'];
 
 export default function MyBookingsPage() {
   const t = useTranslations('myBookings');
   const tCommon = useTranslations('common');
-  const { bookings, isLoading, isError, activeTab, setActiveTab, cancel, isCancelling } = useMyBookingsPage();
+  const tErrors = useTranslations('errors');
+  const {
+    bookings,
+    isLoading,
+    isError,
+    activeTab,
+    setActiveTab,
+    cancel,
+    isCancelling,
+    actionError,
+    clearActionError,
+  } = useMyBookingsPage();
   useMarkStatsSeen('myBookings');
 
   return (
@@ -54,15 +67,18 @@ export default function MyBookingsPage() {
             <MyBookingItem
               key={booking.id}
               booking={booking}
-              statusLabel={t(`status.${booking.status}`)}
-              metaLabel={t('total', { total: booking.totalPrice })}
-              cancelLabel={t('cancel')}
-              ownerContactLabel={t('ownerContact')}
               onCancel={cancel}
               cancelling={isCancelling}
             />
           ))}
         </div>
+      )}
+      {actionError !== null && (
+        <Toast
+          type="error"
+          message={errorMessage(actionError, tErrors, tCommon('error'))}
+          onClose={clearActionError}
+        />
       )}
     </div>
   );

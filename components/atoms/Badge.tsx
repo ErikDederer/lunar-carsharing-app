@@ -1,7 +1,8 @@
 import React from 'react';
 
-type BadgeVariant =
+export type BadgeVariant =
   | 'pending'
+  | 'inProgress'
   | 'confirmed'
   | 'cancelled'
   | 'active'
@@ -20,6 +21,7 @@ interface BadgeProps {
 
 const variantStyles: Record<BadgeVariant, string> = {
   pending:   'bg-orange-50 text-orange-700 border border-orange-200',   // 4.52:1 ✅
+  inProgress: 'bg-blue-50 text-blue-700 border border-blue-200',       // 6.7:1 ✅
   confirmed: 'bg-brand-subtle text-brand border border-green-200',      // 5.1:1 ✅
   active:    'bg-brand-subtle text-brand border border-green-200',      // 5.1:1 ✅
   completed: 'bg-purple-100 text-purple-700 border border-purple-200',  // 6.5:1 ✅
@@ -30,6 +32,7 @@ const variantStyles: Record<BadgeVariant, string> = {
 
 const defaultLabels: Record<BadgeVariant, string> = {
   pending: 'Ожидает',
+  inProgress: 'В аренде',
   confirmed: 'Подтверждено',
   active: 'Активна',
   completed: 'Завершено',

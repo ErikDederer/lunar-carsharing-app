@@ -4,8 +4,8 @@ import { use } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import type { Stripe as StripeType, StripeElements } from '@stripe/stripe-js';
-import { ArrowLeft, CheckCircle2, ShieldCheck, XCircle } from 'lucide-react';
+import { ArrowLeft, CalendarClock, CheckCircle2, CreditCard, Lock, ShieldCheck, XCircle } from 'lucide-react';
+import type { StripePaymentElementOptions } from '@stripe/stripe-js';
 import { PrivateRoute } from '@/components/layout/PrivateRoute';
 import Spinner from '@/components/atoms/Spinner';
 import Button from '@/components/atoms/Button';
@@ -14,6 +14,8 @@ import { useBookingCheckoutPage } from '@/hooks/useBookingCheckoutPage';
 import { getStripe } from '@/lib/stripe';
 import { formatMoney } from '@/lib/formatMoney';
 import { mapErrorToMessage } from '@/lib/apiError';
+import { formatBookingDates, bookingCarName, bookingCarPhoto } from '@/lib/formatBookingDates';
+import type { CheckoutUiState } from '@/types/payment';
 
 export default function BookingCheckoutPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -24,11 +26,42 @@ export default function BookingCheckoutPage({ params }: { params: Promise<{ id: 
   );
 }
 
+type Translator = ReturnType<typeof useTranslations>;
+
+// Sandbox keys only: show the Stripe test card so a demo can be paid.
+const IS_TEST_MODE = (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '').startsWith('pk_test_');
+type PageState = ReturnType<typeof useBookingCheckoutPage>;
+
+function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`bg-bg-card rounded-2xl shadow-sm border border-border-default p-5 ${className}`}>{children}</div>
+  );
+}
+
 function CenteredState({ children }: { children: React.ReactNode }) {
   return (
     <main className="max-w-lg mx-auto px-4 py-16 flex flex-col items-center gap-2 text-sm text-text-muted">
       {children}
     </main>
+  );
+}
+
+function Done({ title, detail }: { title: string; detail?: string }) {
+  return (
+    <Card className="flex flex-col items-center gap-2 text-center">
+      <CheckCircle2 size={28} className="text-brand" />
+      <p className="font-semibold text-text-base">{title}</p>
+      {detail && <p className="text-sm text-text-muted">{detail}</p>}
+    </Card>
+  );
+}
+
+function Waiting({ label }: { label: string }) {
+  return (
+    <Card className="flex items-center justify-center gap-2 text-sm text-text-muted">
+      <Spinner size="sm" />
+      {label}
+    </Card>
   );
 }
 
@@ -52,19 +85,14 @@ function BookingCheckoutContent({ bookingId }: { bookingId: string }) {
   }
 
   const { booking } = page;
-  const payment = booking.payment;
-
-  // Before the first POST /payments/checkout, all we know is the booking's
-  // own Decimal totals (major EUR units) — convert once, here. Once
-  // booking.payment exists (after checkout + the refetch in the hook),
-  // every number below comes straight from the backend, already in cents.
-  const rentalMinorUnits = payment?.amountTotal ?? Math.round(booking.totalPrice * 100);
-  const depositMinorUnits = page.checkout?.deposit?.amount ?? Math.round(booking.depositAmount * 100);
-  const totalMinorUnits = rentalMinorUnits + depositMinorUnits;
-  const currency = payment?.currency ?? 'eur';
-
-  const payoutDate = payment?.disputeWindowEndsAt
-    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(payment.disputeWindowEndsAt))
+  const currency = booking.currency;
+  const photo = bookingCarPhoto(booking.car);
+  const fee =
+    booking.payment && 'platformFeeAmount' in booking.payment ? booking.payment.platformFeeAmount : 0;
+  const dueDate = booking.paymentDueAt
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(
+        new Date(booking.paymentDueAt),
+      )
     : null;
 
   return (
@@ -77,153 +105,218 @@ function BookingCheckoutContent({ bookingId }: { bookingId: string }) {
         {t('backToBookings')}
       </Link>
 
-      <div className="bg-bg-card rounded-2xl shadow-sm p-5">
+      <Card className="flex items-center gap-3">
+        <div className="w-16 h-16 rounded-xl overflow-hidden bg-bg-disabled shrink-0">
+          {photo && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={photo} alt={bookingCarName(booking.car)} className="w-full h-full object-cover" />
+          )}
+        </div>
+        <div className="min-w-0">
+          <p className="font-semibold text-text-base truncate">{bookingCarName(booking.car)}</p>
+          <p className="text-sm text-text-muted">{formatBookingDates(booking.startAt, booking.endAt)}</p>
+        </div>
+      </Card>
+
+      <Card>
         <Section title={t('priceBreakdown')}>
           <div className="flex flex-col gap-2 text-sm">
             <div className="flex justify-between text-text-secondary">
               <span>{t('rental')}</span>
-              <span>{formatMoney(rentalMinorUnits, currency, locale)}</span>
+              <span>{formatMoney(booking.totalPriceCents, currency, locale)}</span>
             </div>
-            {payment && payment.platformFeeAmount > 0 && (
+            {fee > 0 && (
               <p className="text-xs text-text-muted">
-                {t('serviceFeeNote', { amount: formatMoney(payment.platformFeeAmount, currency, locale) })}
+                {t('serviceFeeNote', { amount: formatMoney(fee, currency, locale) })}
               </p>
             )}
-            {depositMinorUnits > 0 && (
+            {booking.depositAmountCents > 0 && (
               <div className="flex justify-between text-text-secondary">
                 <span>{t('deposit')}</span>
-                <span>{formatMoney(depositMinorUnits, currency, locale)}</span>
+                <span>{formatMoney(booking.depositAmountCents, currency, locale)}</span>
               </div>
             )}
             <div className="flex justify-between border-t border-border-default pt-2 font-semibold text-text-base">
-              <span>{t('total')}</span>
-              <span className="text-brand">{formatMoney(totalMinorUnits, currency, locale)}</span>
+              <span>{t('totalRental')}</span>
+              <span className="text-brand">{formatMoney(booking.totalPriceCents, currency, locale)}</span>
             </div>
+            {booking.depositAmountCents > 0 && (
+              <p className="text-xs text-text-muted">{t('depositSeparately')}</p>
+            )}
           </div>
         </Section>
-      </div>
+      </Card>
 
-      <div className="bg-bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-3">
+      <Card className="flex flex-col gap-2">
         <div className="flex items-start gap-3">
           <ShieldCheck size={18} className="text-brand shrink-0 mt-0.5" />
           <p className="text-sm text-text-secondary">{t('holdExplanation')}</p>
         </div>
-        <p className="text-xs text-text-muted pl-[30px]">
-          {payoutDate ? t('payoutEtaKnown', { date: payoutDate }) : t('payoutEtaUnknown')}
-        </p>
-        {depositMinorUnits > 0 && (
+        {booking.depositAmountCents > 0 && (
           <p className="text-xs text-text-muted pl-[30px]">{t('depositExplanation')}</p>
         )}
-      </div>
+      </Card>
 
-      <CheckoutBody bookingId={bookingId} page={page} t={t} tCommon={tCommon} />
+      <StepTitle n={1} title={t('stepPayment')} done={page.paid} />
+      <RentalStep page={page} t={t} tCommon={tCommon} dueDate={dueDate} />
+
+      {booking.depositAmountCents > 0 && (
+        <>
+          <StepTitle n={2} title={t('stepDeposit')} done={page.depositSecured} />
+          <DepositStep page={page} t={t} tCommon={tCommon} locale={locale} />
+        </>
+      )}
+
+      <p className="flex items-center justify-center gap-1.5 text-xs text-text-muted">
+        <Lock size={12} />
+        {t('securedByStripe')}
+      </p>
     </main>
   );
 }
 
-type PageState = ReturnType<typeof useBookingCheckoutPage>;
+function StepTitle({ n, title, done }: { n: number; title: string; done: boolean }) {
+  return (
+    <div className="flex items-center gap-2 mt-2">
+      <span
+        className={[
+          'w-6 h-6 rounded-full text-xs font-semibold flex items-center justify-center',
+          done ? 'bg-brand text-white' : 'bg-brand-subtle text-brand',
+        ].join(' ')}
+      >
+        {done ? '✓' : n}
+      </span>
+      <h2 className="text-sm font-semibold text-text-base">{title}</h2>
+    </div>
+  );
+}
 
-function CheckoutBody({
-  bookingId,
+function RentalStep({
   page,
   t,
   tCommon,
+  dueDate,
 }: {
-  bookingId: string;
   page: PageState;
-  t: ReturnType<typeof useTranslations>;
-  tCommon: ReturnType<typeof useTranslations>;
+  t: Translator;
+  tCommon: Translator;
+  dueDate: string | null;
 }) {
-  if (page.alreadyPaid || page.uiState === 'succeeded') {
-    return (
-      <div className="bg-bg-card rounded-2xl shadow-sm p-5 flex flex-col items-center gap-2 text-center">
-        <CheckCircle2 size={28} className="text-brand" />
-        <p className="font-semibold text-text-base">{t('stateSucceededTitle')}</p>
-        <p className="text-sm text-text-muted">{t('stateSucceededDetail')}</p>
-      </div>
-    );
-  }
-
-  if (!page.canCheckout) {
-    return (
-      <div className="bg-bg-card rounded-2xl shadow-sm p-5 text-sm text-text-muted">
-        {t('notConfirmedYet')}
-      </div>
-    );
-  }
-
-  if (page.isCreatingIntent || !page.checkout) {
-    return (
-      <div className="bg-bg-card rounded-2xl shadow-sm p-5 flex items-center justify-center gap-2 text-sm text-text-muted">
-        <Spinner size="sm" />
-        {tCommon('loading')}
-      </div>
-    );
-  }
-
+  if (page.paid) return <Done title={t('stateSucceededTitle')} detail={t('stateSucceededDetail')} />;
+  if (page.waitingForServer) return <Waiting label={t('confirmingPayment')} />;
+  if (!page.canCheckout) return <Card className="text-sm text-text-muted">{t('notConfirmedYet')}</Card>;
   if (page.isCheckoutError) {
     return (
-      <div className="bg-bg-card rounded-2xl shadow-sm p-5 text-sm text-text-error">
-        {mapErrorToMessage(page.checkoutError, t, tCommon('error'))}
-      </div>
+      <Card className="text-sm text-text-error">{mapErrorToMessage(page.checkoutError, t, tCommon('error'))}</Card>
     );
   }
+  if (page.isCreatingIntent || !page.checkout) return <Waiting label={tCommon('loading')} />;
 
   return (
-    <Elements
-      stripe={getStripe()}
-      options={{ clientSecret: page.checkout.payment.clientSecret }}
-    >
-      <PaymentForm bookingId={bookingId} page={page} t={t} tCommon={tCommon} />
+    <Elements stripe={getStripe()} options={{ clientSecret: page.checkout.payment.clientSecret }}>
+      <ConfirmForm
+        step={page.rental}
+        options={page.paymentElementOptions}
+        buttonLabel={t('payButton')}
+        hint={dueDate ? t('payBy', { date: dueDate }) : null}
+        t={t}
+        tCommon={tCommon}
+      />
     </Elements>
   );
 }
 
-function PaymentForm({
+function DepositStep({
   page,
   t,
   tCommon,
+  locale,
 }: {
-  bookingId: string;
   page: PageState;
-  t: ReturnType<typeof useTranslations>;
-  tCommon: ReturnType<typeof useTranslations>;
+  t: Translator;
+  tCommon: Translator;
+  locale: string;
+}) {
+  if (page.depositSecured) return <Done title={t('depositSecuredTitle')} detail={t('depositSecuredDetail')} />;
+  if (!page.paid) return <Card className="text-sm text-text-muted">{t('depositAfterPayment')}</Card>;
+  if (page.waitingForServer) return <Waiting label={t('confirmingDeposit')} />;
+  if (page.isDepositError) {
+    return (
+      <Card className="text-sm text-text-error">{mapErrorToMessage(page.depositError, t, tCommon('error'))}</Card>
+    );
+  }
+  if (page.isLoadingDeposit || !page.deposit) return <Waiting label={tCommon('loading')} />;
+
+  const { deposit } = page;
+  if (deposit.status === 'SCHEDULED' && deposit.opensAt) {
+    const opens = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(
+      new Date(deposit.opensAt),
+    );
+    return (
+      <Card className="flex items-start gap-3">
+        <CalendarClock size={18} className="text-brand shrink-0 mt-0.5" />
+        <p className="text-sm text-text-secondary">{t('depositOpensAt', { date: opens })}</p>
+      </Card>
+    );
+  }
+  if (!deposit.clientSecret) return <Waiting label={t('confirmingDeposit')} />;
+
+  return (
+    <Elements stripe={getStripe()} options={{ clientSecret: deposit.clientSecret }}>
+      <ConfirmForm
+        step={page.depositStep}
+        options={page.paymentElementOptions}
+        buttonLabel={t('depositButton')}
+        hint={deposit.holdStrategy === 'AUTH_HOLD' ? t('depositHoldHint') : t('depositChargeHint')}
+        t={t}
+        tCommon={tCommon}
+      />
+    </Elements>
+  );
+}
+
+function ConfirmForm({
+  step,
+  options,
+  buttonLabel,
+  hint,
+  t,
+  tCommon,
+}: {
+  step: PageState['rental'];
+  options: StripePaymentElementOptions;
+  buttonLabel: string;
+  hint: string | null;
+  t: Translator;
+  tCommon: Translator;
 }) {
   const stripe = useStripe();
   const elements = useElements();
-
-  function handlePay(stripeInstance: StripeType | null, elementsInstance: StripeElements | null) {
-    void page.pay(stripeInstance, elementsInstance);
-  }
+  const state: CheckoutUiState = step.uiState;
 
   return (
-    <div className="bg-bg-card rounded-2xl shadow-sm p-5 flex flex-col gap-4">
-      <PaymentElement options={page.paymentElementOptions} />
+    <Card className="flex flex-col gap-4">
+      {hint && <p className="text-xs text-text-muted">{hint}</p>}
+      <PaymentElement options={options} />
 
-      {page.uiState === 'requires_action' && (
-        <p className="text-sm text-text-secondary">{t('stateRequiresAction')}</p>
-      )}
+      {state === 'requires_action' && <p className="text-sm text-text-secondary">{t('stateRequiresAction')}</p>}
 
-      {page.uiState === 'failed' && (
+      {state === 'failed' && (
         <div className="flex items-start gap-2 text-sm text-text-error">
           <XCircle size={16} className="shrink-0 mt-0.5" />
-          <div className="flex flex-col gap-1">
-            <span>{mapErrorToMessage(page.confirmError, t, tCommon('error'))}</span>
-          </div>
+          <span>{mapErrorToMessage(step.error, t, tCommon('error'))}</span>
         </div>
       )}
 
       <Button
         className="w-full"
-        disabled={!stripe || !elements || page.uiState === 'submitting'}
-        onClick={() => handlePay(stripe, elements)}
+        leftIcon={<CreditCard size={16} />}
+        disabled={!stripe || !elements || state === 'submitting'}
+        onClick={() => void step.confirm(stripe, elements)}
       >
-        {page.uiState === 'submitting'
-          ? t('payButtonProcessing')
-          : page.uiState === 'failed'
-            ? t('retry')
-            : t('payButton')}
+        {state === 'submitting' ? t('payButtonProcessing') : state === 'failed' ? t('retry') : buttonLabel}
       </Button>
-    </div>
+      {IS_TEST_MODE && <p className="text-[11px] text-text-muted text-center">{t('testCardHint')}</p>}
+    </Card>
   );
 }
