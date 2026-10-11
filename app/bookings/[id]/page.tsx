@@ -4,7 +4,8 @@ import { use } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { ArrowLeft, CalendarClock, CheckCircle2, CreditCard, Lock, ShieldCheck, XCircle } from 'lucide-react';
+import { ArrowLeft, CalendarClock, CreditCard, Lock, ShieldCheck, XCircle } from 'lucide-react';
+import { AnimatedCheck } from '@/components/motion/AnimatedCheck';
 import type { StripePaymentElementOptions } from '@stripe/stripe-js';
 import { PrivateRoute } from '@/components/layout/PrivateRoute';
 import Spinner from '@/components/atoms/Spinner';
@@ -16,6 +17,7 @@ import { formatMoney } from '@/lib/formatMoney';
 import { mapErrorToMessage } from '@/lib/apiError';
 import { formatBookingDates, bookingCarName, bookingCarPhoto } from '@/lib/formatBookingDates';
 import type { CheckoutUiState } from '@/types/payment';
+import { Reveal } from '@/components/motion/Reveal';
 
 export default function BookingCheckoutPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -49,7 +51,7 @@ function CenteredState({ children }: { children: React.ReactNode }) {
 function Done({ title, detail }: { title: string; detail?: string }) {
   return (
     <Card className="flex flex-col items-center gap-2 text-center">
-      <CheckCircle2 size={28} className="text-brand" />
+      <AnimatedCheck />
       <p className="font-semibold text-text-base">{title}</p>
       {detail && <p className="text-sm text-text-muted">{detail}</p>}
     </Card>
@@ -96,7 +98,7 @@ function BookingCheckoutContent({ bookingId }: { bookingId: string }) {
     : null;
 
   return (
-    <main className="max-w-lg mx-auto px-4 py-6 flex flex-col gap-4">
+    <Reveal as="main" className="max-w-lg mx-auto px-4 py-6 flex flex-col gap-4" stagger={0.06} y={16}>
       <Link
         href="/bookings"
         className="flex items-center gap-1.5 text-sm text-text-muted hover:text-text-secondary transition-colors"
@@ -171,7 +173,7 @@ function BookingCheckoutContent({ bookingId }: { bookingId: string }) {
         <Lock size={12} />
         {t('securedByStripe')}
       </p>
-    </main>
+    </Reveal>
   );
 }
 

@@ -12,6 +12,7 @@ import { CarCard } from '@/components/search/CarCard';
 import { useSearchPage } from '@/hooks/useSearchPage';
 import { useTranslations } from 'next-intl';
 import { MapPin, SlidersHorizontal, X } from 'lucide-react';
+import { Reveal } from '@/components/motion/Reveal';
 
 export default function SearchPage() {
   const t = useTranslations('search');
@@ -157,11 +158,11 @@ export default function SearchPage() {
               <p className="text-sm text-gray-400 text-center pt-8">{t('nothingFound')}</p>
             )}
 
-            <div className="grid grid-cols-2 gap-3">
+            <Reveal className="grid grid-cols-2 gap-3" stagger={0.05} y={18} watch={cars.map((c) => c.id).join()}>
               {cars.map((car) => (
                 <CarCard key={car.id} car={car} noReviewsLabel={t('noReviews')} perDayLabel={t('perDayShort')} />
               ))}
-            </div>
+            </Reveal>
 
             {hasNextPage && (
               <Button

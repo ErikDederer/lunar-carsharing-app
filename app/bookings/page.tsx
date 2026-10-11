@@ -11,6 +11,7 @@ import { useMyBookingsPage, type MyBookingsTab } from '@/hooks/useMyBookingsPage
 import { useMarkStatsSeen } from '@/hooks/useMarkStatsSeen';
 import { Toast } from '@/components/common/Toast';
 import { errorMessage } from '@/lib/errorMessage';
+import { Reveal } from '@/components/motion/Reveal';
 
 const TAB_KEYS: MyBookingsTab[] = ['all', 'active', 'completed', 'cancelled'];
 
@@ -62,7 +63,7 @@ export default function MyBookingsPage() {
       )}
 
       {!isLoading && !isError && bookings.length > 0 && (
-        <div className="flex flex-col gap-3">
+        <Reveal className="flex flex-col gap-3" watch={bookings.map((b) => b.id).join()}>
           {bookings.map((booking) => (
             <MyBookingItem
               key={booking.id}
@@ -71,7 +72,7 @@ export default function MyBookingsPage() {
               cancelling={isCancelling}
             />
           ))}
-        </div>
+        </Reveal>
       )}
       {actionError !== null && (
         <Toast

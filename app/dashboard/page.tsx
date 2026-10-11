@@ -8,6 +8,7 @@ import { DashboardCarCard } from '@/components/dashboard/DashboardCarCard';
 import { PayoutSetupBanner } from '@/components/dashboard/PayoutSetupBanner';
 import { useDashboardPage } from '@/hooks/useDashboardPage';
 import { useTranslations } from 'next-intl';
+import { Reveal } from '@/components/motion/Reveal';
 
 export default function DashboardPage() {
   const t = useTranslations('dashboard');
@@ -63,7 +64,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <div className="flex flex-col gap-3">
+      <Reveal className="flex flex-col gap-3" watch={cars.map((c) => c.id).join()}>
         {cars.map((car) => (
           <DashboardCarCard
             key={car.id}
@@ -85,7 +86,7 @@ export default function DashboardPage() {
             removing={isRemoving && removingId === car.id}
           />
         ))}
-      </div>
+      </Reveal>
 
     </div>
   );

@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CheckCircle2, XCircle, X } from 'lucide-react';
+import { gsap, MOTION_OK, useGSAP } from '@/lib/gsap';
 
 interface ToastProps {
   message: string;
@@ -11,20 +12,47 @@ interface ToastProps {
   onClose: () => void;
 }
 
+// Springs in from the bottom, shows the remaining time as a thin bar,
+// pauses while hovered and slides away before calling onClose.
 export function Toast({ message, type = 'success', duration = 4000, onClose }: ToastProps) {
-  const [visible, setVisible] = useState(false);
-
+  // Toasts only appear after a user action (never during SSR), so the
+  // portal target can be looked up right away.
+  const [portal] = useState<HTMLElement | null>(() =>
+    typeof document === 'undefined' ? null : document.getElementById('toast-portal'),
+  );
+  const cardRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const timeline = useRef<gsap.core.Timeline | null>(null);
+  // Callers often pass an inline arrow; keep the latest without restarting
+  // the timer on every parent render.
+  const onCloseRef = useRef(onClose);
   useEffect(() => {
-    const raf = requestAnimationFrame(() => setVisible(true));
-    const timer = window.setTimeout(onClose, duration);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.clearTimeout(timer);
-    };
-  }, [duration, onClose]);
+    onCloseRef.current = onClose;
+  }, [onClose]);
 
-  if (typeof document === 'undefined') return null;
-  const portal = document.getElementById('toast-portal');
+  useGSAP(
+    () => {
+      if (!portal || !cardRef.current || !barRef.current) return;
+      const close = () => onCloseRef.current();
+      const mm = gsap.matchMedia();
+
+      mm.add(MOTION_OK, () => {
+        timeline.current = gsap
+          .timeline({ onComplete: close })
+          .from(cardRef.current, { y: 32, scale: 0.94, autoAlpha: 0, duration: 0.5, ease: 'back.out(1.8)' })
+          .fromTo(barRef.current, { scaleX: 1 }, { scaleX: 0, duration: duration / 1000, ease: 'none' }, '<')
+          .to(cardRef.current, { y: 16, autoAlpha: 0, duration: 0.25, ease: 'power2.in' });
+      });
+      mm.add('(prefers-reduced-motion: reduce)', () => {
+        const timer = window.setTimeout(close, duration);
+        return () => window.clearTimeout(timer);
+      });
+
+      return () => mm.revert();
+    },
+    { dependencies: [portal, duration, message] },
+  );
+
   if (!portal) return null;
 
   const isSuccess = type === 'success';
@@ -36,14 +64,12 @@ export function Toast({ message, type = 'success', duration = 4000, onClose }: T
       className="pointer-events-none fixed inset-x-0 bottom-6 z-[100] flex justify-center px-4"
     >
       <div
+        ref={cardRef}
+        onMouseEnter={() => timeline.current?.pause()}
+        onMouseLeave={() => timeline.current?.resume()}
         className={[
-          'pointer-events-auto flex items-center gap-3 rounded-xl border px-4 py-3 shadow-lg',
-          'transition-all duration-300 ease-out',
-          visible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0',
-          'motion-reduce:transition-none',
-          isSuccess
-            ? 'border-brand/20 bg-bg-card text-text-base'
-            : 'border-border-error bg-bg-card text-text-base',
+          'pointer-events-auto relative flex items-center gap-3 overflow-hidden rounded-xl border px-4 py-3 shadow-xl backdrop-blur',
+          isSuccess ? 'border-brand/25 bg-bg-card/95 text-text-base' : 'border-border-error bg-bg-card/95 text-text-base',
         ].join(' ')}
       >
         <span className={isSuccess ? 'text-brand' : 'text-text-error'} aria-hidden="true">
@@ -52,12 +78,20 @@ export function Toast({ message, type = 'success', duration = 4000, onClose }: T
         <span className="text-sm font-medium">{message}</span>
         <button
           type="button"
-          onClick={onClose}
+          onClick={() => onCloseRef.current()}
           aria-label="Close"
           className="ml-1 text-text-muted transition-colors hover:text-text-secondary"
         >
           <X size={15} />
         </button>
+        <div
+          ref={barRef}
+          aria-hidden="true"
+          className={[
+            'absolute bottom-0 left-0 h-0.5 w-full origin-left',
+            isSuccess ? 'bg-brand' : 'bg-text-error',
+          ].join(' ')}
+        />
       </div>
     </div>,
     portal,
