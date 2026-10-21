@@ -1,0 +1,57 @@
+name: Portfolio demo health
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,17,27,37,47,57 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-demo-health
+  cancel-in-progress: false
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Check application and database readiness
+        shell: python
+        run: |
+          import concurrent.futures
+          import json
+          import time
+          import urllib.request
+
+          targets = {
+              "Carsharing": "https://p2p-carsharing-api.onrender.com/api/v1/health",
+              "Online Booking": "https://autowerkstatt-online-buchung-6ecx.vercel.app/api/health",
+          }
+
+          def check(item):
+              name, url = item
+              for attempt in range(3):
+                  try:
+                      request = urllib.request.Request(url, headers={
+                          "User-Agent": "ErikPortfolioHealth/1.0",
+                          "Cache-Control": "no-cache",
+                      })
+                      with urllib.request.urlopen(request, timeout=90) as response:
+                          body = json.load(response)
+                          if response.status != 200 or body.get("status") != "ok" or body.get("database") != "connected":
+                              raise ValueError("Application or database is not ready")
+                      print(f"{name}: application and database healthy", flush=True)
+                      return True
+                  except Exception as error:
+                      # Do not log response bodies, credentials or customer data.
+                      print(f"{name}: attempt {attempt + 1} failed ({type(error).__name__})", flush=True)
+                      if attempt < 2:
+                          time.sleep(10)
+              return False
+
+          with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+              results = list(pool.map(check, targets.items()))
+          if not all(results):
+              raise SystemExit("One or more portfolio demos are unavailable")

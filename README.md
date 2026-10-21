@@ -3,7 +3,7 @@
 A peer-to-peer car rental platform where owners list their vehicles and renters can find and book them online.
 
 **Live:** [lunar-carsharing-app.vercel.app](https://lunar-carsharing-app.vercel.app)  
-**API:** [lunar-carsharing-api-ed2j.onrender.com](https://lunar-carsharing-api-ed2j.onrender.com)
+**API:** [p2p-carsharing-api.onrender.com](https://p2p-carsharing-api.onrender.com)
 
 ---
 
@@ -45,7 +45,7 @@ npm install
 Create `.env.local`:
 
 ```env
-NEXT_PUBLIC_API_URL=https://lunar-carsharing-api-ed2j.onrender.com/api/v1
+NEXT_PUBLIC_API_URL=https://p2p-carsharing-api.onrender.com/api/v1
 ```
 
 ```bash
@@ -74,4 +74,17 @@ messages/             # Translations (en, de, ru)
 
 ## Related
 
-- [Backend (NestJS)](https://github.com/ErikDederer/lunar-carsharing-api) — REST API, Prisma, PostgreSQL, JWT auth
+- Backend: NestJS, Prisma, PostgreSQL, JWT auth (maintained in a separate private repository).
+
+## Demo availability
+
+The `Portfolio demo health` Actions workflow checks this API and the companion
+Online Booking demo every 10 minutes. Both checks execute a read-only database
+query. A failed database check fails the workflow even if the HTTP status is 200.
+No credentials, booking records or other customer data are logged.
+
+Run it manually from the Actions tab to check or wake the demos before sharing them.
+This is best-effort monitoring, not an uptime guarantee: GitHub scheduled jobs can
+be delayed or dropped, and public-repository schedules are disabled after 60 days
+without repository activity. Free hosting quotas still apply. For guaranteed
+avoidance of idle suspension, use an always-on hosting plan.
