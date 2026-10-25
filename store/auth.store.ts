@@ -43,8 +43,8 @@ export const useAuthStore = create<AuthState>()(
       updateUser: (patch) =>
         set((state) => ({ user: state.user ? { ...state.user, ...patch } : state.user })),
       logout: () => {
-        clearQueryCache();
         set({ user: null, token: null, refreshToken: null, isAuthenticated: false });
+        clearQueryCache();
       },
     }),
     {
